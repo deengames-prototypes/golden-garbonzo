@@ -29,20 +29,8 @@ namespace Prototype.Game
 
             var dungeon = new Dungeon();
             var firstRoom = dungeon.Rooms[0];
-            var connections = firstRoom.ConnectedTo;
 
-            var builder = new StringBuilder($"Welcome to the dungeon! You are in the {firstRoom.Id} room. This room connects to: ");
-            foreach (var room in connections)
-            {
-                builder.Append($"The {room.Id} room, ");
-
-                if (connections.Count > 1 && room == connections[firstRoom.ConnectedTo.Count - 1])
-                {
-                    builder.Append(" and ");
-                }
-            };
-
-            SpeakAndPrint(builder.ToString());
+            SpeakAndPrint($"Welcome to the dungeon! {firstRoom.GetContents()}");
             this.speaker.FinishSpeaking();
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Prototype.Game.Models
 {
@@ -14,7 +15,7 @@ namespace Prototype.Game.Models
         };
 
         public string Id { get; private set;  }
-        public readonly List<Room> ConnectedTo = new List<Room>();
+        private readonly List<Room> connectedTo = new List<Room>();
 
         public Room()
         {
@@ -24,10 +25,28 @@ namespace Prototype.Game.Models
 
         public void ConnectTo(Room target)
         {
-            if (!ConnectedTo.Contains(target))
+            if (!connectedTo.Contains(target))
             {
-                ConnectedTo.Add(target);
+                connectedTo.Add(target);
             }
+        }
+
+        public string GetContents()
+        {
+            var builder = new StringBuilder();
+            builder.Append($"You are in the {this.Id} room. This room connects to: ");
+
+            foreach (var room in this.connectedTo)
+            {
+                builder.Append($"The {room.Id} room, ");
+
+                if (this.connectedTo.Count > 1 && room == this.connectedTo[this.connectedTo.Count - 1])
+                {
+                    builder.Append(" and ");
+                }
+            };
+
+            return builder.ToString();
         }
     }
 }
