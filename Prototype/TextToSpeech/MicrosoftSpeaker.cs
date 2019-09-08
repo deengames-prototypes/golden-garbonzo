@@ -11,6 +11,7 @@ namespace Prototype.TextToSpeech
     public class MicrosoftSpeaker : ISpeaker
     {
         private SpeechSynthesizer synthesizer;
+        private Prompt lastSpoken;
 
         public MicrosoftSpeaker()
         {
@@ -22,8 +23,13 @@ namespace Prototype.TextToSpeech
         }
 
         public void Speak(string text)
-        { 
-            synthesizer.Speak(text);
+        {
+            if (this.lastSpoken != null && !this.lastSpoken.IsCompleted)
+            {
+                synthesizer.SpeakAsyncCancel(this.lastSpoken);
+            }
+
+            this.lastSpoken = synthesizer.SpeakAsync(text);
         }
 
 
