@@ -1,4 +1,5 @@
-﻿using Prototype.TextToSpeech;
+﻿using Prototype.Game.Models;
+using Prototype.TextToSpeech;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Prototype.Game
         public void Run()
         {
             this.speaker = new MicrosoftSpeaker();
-            string input = "";
+            /*string input = "";
 
             SpeakAndPrint("Hello. Type something and press enter, and I will say it. Type QUIT at any time to quit");
 
@@ -24,9 +25,25 @@ namespace Prototype.Game
                 SpeakAndPrint(input);
                 Console.Write("> ");
             }
+            */
 
-            SpeakAndPrint("BYE!");
-            System.Threading.Thread.Sleep(1500); // needed for last audio to play
+            var dungeon = new Dungeon();
+            var firstRoom = dungeon.Rooms[0];
+            var connections = firstRoom.ConnectedTo;
+
+            var builder = new StringBuilder($"Welcome to the dungeon! You are in the {firstRoom.Id} room. This room connects to: ");
+            foreach (var room in connections)
+            {
+                builder.Append($"The {room.Id} room, ");
+
+                if (connections.Count > 1 && room == connections[firstRoom.ConnectedTo.Count - 1])
+                {
+                    builder.Append(" and ");
+                }
+            };
+
+            SpeakAndPrint(builder.ToString());
+            this.speaker.FinishSpeaking();
         }
 
         private void SpeakAndPrint(string text)

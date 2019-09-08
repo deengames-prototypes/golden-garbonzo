@@ -78,5 +78,13 @@ namespace Prototype.TextToSpeech
                 }
             }
         }
+
+        public void FinishSpeaking()
+        {
+            while (this.lastSpoken != null && !this.lastSpoken.IsCompleted)
+            {
+                System.Threading.Thread.Sleep(100);
+            }
+        }
     }
 }
