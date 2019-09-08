@@ -25,6 +25,19 @@ namespace Prototype.Game.Models
 
                 this.Rooms.Add(room);
             }
+
+            for (var i = 0; i < this.Rooms.Count; i++)
+            {
+                var room = this.Rooms[i];
+                var target = room;
+
+                while (target == room)
+                {
+                    target = this.Rooms[random.Next(this.Rooms.Count)];
+                }
+
+                room.ConnectTo(target);
+            }
         }
     }
 }

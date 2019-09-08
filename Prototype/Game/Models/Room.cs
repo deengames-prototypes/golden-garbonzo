@@ -34,13 +34,13 @@ namespace Prototype.Game.Models
         public string GetContents()
         {
             var builder = new StringBuilder();
-            builder.Append($"You are in the {this.Id} room. This room connects to: ");
+            builder.Append($"You are in the {this.Id} room. This room connects to ");
 
             foreach (var room in this.connectedTo)
             {
                 builder.Append($"The {room.Id} room, ");
 
-                if (this.connectedTo.Count > 1 && room == this.connectedTo[this.connectedTo.Count - 1])
+                if (this.connectedTo.Count > 1 && room == this.connectedTo[this.connectedTo.Count - 2])
                 {
                     builder.Append(" and ");
                 }
