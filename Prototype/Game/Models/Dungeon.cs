@@ -13,10 +13,14 @@ namespace Prototype.Game.Models
 
         public Dungeon()
         {
-            var numRooms = random.Next(5, 9); // 5-8 rooms
+            var numRooms = random.Next(GlobalConfig.MIN_ROOMS_PER_FLOOR, GlobalConfig.MAX_ROOMS_PER_FLOOR); // 5-8 rooms
             while (this.Rooms.Count < numRooms)
             {
-                var room = new Room();
+                // 40% chance of an empty room
+                var numMonsters = random.NextDouble() <= GlobalConfig.PROBABILITY_OF_NO_MONSTERS ?
+                    0 : random.Next(GlobalConfig.MIN_MONSTERS, GlobalConfig.MAX_MONSTERS);
+
+                var room = new Room(numMonsters);
                 // Guaranteed connectedness: each room connects to the next
                 if (this.Rooms.Any())
                 {

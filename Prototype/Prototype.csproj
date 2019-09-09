@@ -46,7 +46,10 @@
   <ItemGroup>
     <Compile Include="Game\GoldenGarbonzo.cs" />
     <Compile Include="Game\Models\Dungeon.cs" />
+    <Compile Include="Game\Models\Monster.cs" />
+    <Compile Include="Game\Models\Player.cs" />
     <Compile Include="Game\Models\Room.cs" />
+    <Compile Include="Game\GlobalConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextToSpeech\ISpeaker.cs" />

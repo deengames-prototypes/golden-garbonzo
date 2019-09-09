@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Prototype.Game.Models
@@ -15,12 +16,45 @@ namespace Prototype.Game.Models
         };
 
         public string Id { get; private set;  }
+        public readonly List<Monster> Monsters = new List<Monster>();
+
         private readonly List<Room> connectedTo = new List<Room>();
 
-        public Room()
+        public Room(int numMonsters)
         {
             this.Id = unusedRoomIds[random.Next(unusedRoomIds.Count)];
             unusedRoomIds.Remove(this.Id);
+
+            var totalMonsterProbability = GlobalConfig.MONSTER_PROBABILITY.Values.Sum();
+            var weightSoFar = 0f;
+            while (Monsters.Count < numMonsters)
+            {
+                var picked = random.NextDouble();
+                if (picked < GlobalConfig.MONSTER_PROBABILITY[MonsterType.Weak] + weightSoFar)
+                {
+                    this.Monsters.Add(Monster.Generate(MonsterType.Weak));
+                }
+                else
+                {
+                    weightSoFar += GlobalConfig.MONSTER_PROBABILITY[MonsterType.Weak];
+                    if (picked < GlobalConfig.MONSTER_PROBABILITY[MonsterType.Regular] + weightSoFar)
+                    {
+                        this.Monsters.Add(Monster.Generate(MonsterType.Regular));
+                    }
+                    else
+                    {
+                        weightSoFar += GlobalConfig.MONSTER_PROBABILITY[MonsterType.Regular];
+                        if (picked < GlobalConfig.MONSTER_PROBABILITY[MonsterType.Strong] + weightSoFar)
+                        {
+                            this.Monsters.Add(Monster.Generate(MonsterType.Strong));
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("Random-weight algorithm is wrong");
+                        }
+                    }
+                }
+            }
         }
 
         public void ConnectTo(Room target)

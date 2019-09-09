@@ -30,6 +30,9 @@ namespace Prototype.Game
             var dungeon = new Dungeon();
             var firstRoom = dungeon.Rooms[0];
 
+            var debug = new List<Monster>();
+            dungeon.Rooms.ForEach(r => debug.AddRange(r.Monsters));
+
             SpeakAndPrint($"Welcome to the dungeon! {firstRoom.GetContents()}");
             this.speaker.FinishSpeaking();
         }
