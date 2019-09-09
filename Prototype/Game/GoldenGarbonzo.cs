@@ -38,6 +38,8 @@ namespace Prototype.Game
                 SpeakAndPrint($"You typed: {input}");
                 this.ProcessInput(input);
             }
+
+            this.SpeakAndPrint("Bye!");
         }
 
         private void ProcessInput(string input)
