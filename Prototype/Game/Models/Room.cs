@@ -38,7 +38,7 @@ namespace Prototype.Game.Models
         public string GetContents()
         {
             var builder = new StringBuilder();
-            string numberOfMonsters = this.Monsters.Any() ? this.Monsters.Count.ToString() : "no";
+            string numberOfMonsters = this.Monsters.Any() ? $"the following {this.Monsters.Count}" : "no";
             builder.Append($"You are in the {this.Id} room. ");
 
             builder.Append($"This room contains {numberOfMonsters} monsters: ");

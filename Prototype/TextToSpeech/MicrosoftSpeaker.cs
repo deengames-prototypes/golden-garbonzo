@@ -22,14 +22,21 @@ namespace Prototype.TextToSpeech
             this.synthesizer.SelectVoiceByHints(VoiceGender.Female);
         }
 
-        public void Speak(string text)
+        public void Speak(string text, bool isSynchronous = false)
         {
             if (this.lastSpoken != null && !this.lastSpoken.IsCompleted)
             {
                 synthesizer.SpeakAsyncCancel(this.lastSpoken);
             }
 
-            this.lastSpoken = synthesizer.SpeakAsync(text);
+            if (isSynchronous)
+            {
+                synthesizer.Speak(text);
+            }
+            else
+            {
+                this.lastSpoken = synthesizer.SpeakAsync(text);
+            }
         }
 
 
