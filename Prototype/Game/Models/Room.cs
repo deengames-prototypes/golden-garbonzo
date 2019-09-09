@@ -48,5 +48,10 @@ namespace Prototype.Game.Models
 
             return builder.ToString();
         }
+
+        internal bool IsConnectedTo(Room target)
+        {
+            return this.connectedTo.Contains(target);
+        }
     }
 }

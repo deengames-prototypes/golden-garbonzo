@@ -17,7 +17,7 @@ namespace Prototype.Game.Models
             while (this.Rooms.Count < numRooms)
             {
                 var room = new Room();
-                // Guaranteed connectedness
+                // Guaranteed connectedness: each room connects to the next
                 if (this.Rooms.Any())
                 {
                     this.Rooms[this.Rooms.Count - 1].ConnectTo(room);
@@ -26,12 +26,13 @@ namespace Prototype.Game.Models
                 this.Rooms.Add(room);
             }
 
+            // Also connect each room to a random target
             for (var i = 0; i < this.Rooms.Count; i++)
             {
                 var room = this.Rooms[i];
                 var target = room;
 
-                while (target == room)
+                while (target == room || room.IsConnectedTo(target))
                 {
                     target = this.Rooms[random.Next(this.Rooms.Count)];
                 }
