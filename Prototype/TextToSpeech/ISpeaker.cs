@@ -2,7 +2,8 @@
 {
     interface ISpeaker
     {
-        void Speak(string text, bool isSynchronous);
+        void Speak(string text);
+        void StopAndClearQueue();
         void FinishSpeaking();
     }
 }
