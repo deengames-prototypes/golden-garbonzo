@@ -35,6 +35,16 @@ namespace Prototype.Game.Models
             }
         }
 
+        public Monster GetMonster(string monsterName)
+        {
+            return this.Monsters.FirstOrDefault(m => m.CurrentHealth > 0 && m.Name.ToUpperInvariant().Contains(monsterName.ToUpperInvariant()));
+        }
+
+        public bool HasMonster(string monsterName)
+        {
+            return this.GetMonster(monsterName) != null;
+        }
+
         public string GetContents()
         {
             var builder = new StringBuilder();
