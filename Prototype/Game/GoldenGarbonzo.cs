@@ -25,6 +25,9 @@ namespace Prototype.Game
             this.MainProcessingLoop();
 
             this.speaker.FinishSpeaking();
+
+            this.SpeakAndPrint("Bye!");
+            System.Threading.Thread.Sleep(1250);
         }
 
         private void MainProcessingLoop()
