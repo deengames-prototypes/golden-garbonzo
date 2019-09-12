@@ -10,7 +10,7 @@ namespace Prototype.Game
 
         public static int MIN_MONSTERS = 2;
         public static int MAX_MONSTERS = 5;
-        public static float PROBABILITY_OF_NO_MONSTERS = 0.3f;
+        public static float PROBABILITY_OF_NO_MONSTERS = 0f;
         public static Dictionary<MonsterType, float> MONSTER_PROBABILITY = new Dictionary<MonsterType, float>()
         {
             { MonsterType.Weak, 0.3f },
