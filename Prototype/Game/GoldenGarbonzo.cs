@@ -62,6 +62,7 @@ namespace Prototype.Game
                     this.ProcessAttack(inputTokens);
                     break;
                 case "QUIT":
+                case "Q":
                     return;
                 default:
                     SpeakAndPrint($"Not sure how to {input}");

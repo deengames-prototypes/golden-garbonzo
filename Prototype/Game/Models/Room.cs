@@ -48,11 +48,12 @@ namespace Prototype.Game.Models
         public string GetContents()
         {
             var builder = new StringBuilder();
-            string numberOfMonsters = this.Monsters.Any() ? $"the following {this.Monsters.Count}" : "no";
+            var aliveMonsters = this.Monsters.Where(m => m.CurrentHealth > 0);
+            string numberOfMonsters = aliveMonsters.Any() ? $"the following {aliveMonsters.Count()}" : "no";
             builder.Append($"You are in the {this.Id} room. ");
 
             builder.Append($"This room contains {numberOfMonsters} monsters: ");
-            foreach (var monsterGroup in this.Monsters.GroupBy(m => m.Name))
+            foreach (var monsterGroup in aliveMonsters.GroupBy(m => m.Name))
             {
                 builder.Append($"{monsterGroup.Count()} {monsterGroup.Key}s, ");
             }
