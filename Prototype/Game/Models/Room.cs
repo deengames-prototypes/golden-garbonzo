@@ -77,6 +77,16 @@ namespace Prototype.Game.Models
             return this.connectedTo.Contains(target);
         }
 
+        internal bool IsConnectedTo(string roomName)
+        {
+            return this.GetConnection(roomName) != null;
+        }
+
+        internal Room GetConnection(string roomName)
+        {
+            return this.connectedTo.SingleOrDefault(r => r.Id.ToUpperInvariant().Contains(roomName.ToUpperInvariant()));
+        }
+
         private void GenerateMonsters(int numMonsters)
         {
             var totalMonsterProbability = GlobalConfig.MONSTER_PROBABILITY.Values.Sum();

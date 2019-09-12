@@ -31,7 +31,7 @@ namespace Prototype.Game
         {
             string input = "";
 
-            while (input.Trim().ToUpper() != "QUIT")
+            while (input.Trim().ToUpper() != "QUIT" && input.ToUpper() != "Q")
             {
                 SpeakAndPrint("Your command? ");
                 Console.Write("> ");
@@ -60,6 +60,10 @@ namespace Prototype.Game
                     break;
                 case "ATTACK":
                     this.ProcessAttack(inputTokens);
+                    break;
+                case "GO":
+                case "G":
+                    this.ProcessMove(inputTokens);
                     break;
                 case "QUIT":
                 case "Q":
@@ -92,6 +96,28 @@ namespace Prototype.Game
                     var winnerMessage = results.Winner == player ? $"you vanquish your foe! You had {player.CurrentHealth} out of {player.TotalHealth} health." : $"you collapse to the ground in a heap! (The {target.Name} had {target.CurrentHealth} out of {target.TotalHealth} health.)";
                     SpeakAndPrint($"You attack the {target.Name}! After {results.RoundMessages.Length} rounds, {winnerMessage}");
                     player.CurrentHealth = player.TotalHealth;
+                }
+            }
+        }
+
+        private void ProcessMove(string[] inputTokens)
+        {
+            if(inputTokens.Length != 2)
+            {
+                SpeakAndPrint("Type go and then the room to go to. Type list to list connected rooms.");
+            }
+            else
+            {
+                var targetName = inputTokens[1];
+                if (!this.currentRoom.IsConnectedTo(targetName))
+                {
+                    SpeakAndPrint($"There doesn't seem to be a way to go to {targetName} from here.");
+                }
+                else
+                {
+                    this.currentRoom = this.currentRoom.GetConnection(targetName);
+                    SpeakAndPrint(this.currentRoom.GetContents());
+
                 }
             }
         }
