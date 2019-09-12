@@ -88,8 +88,9 @@ namespace Prototype.Game
                     var battler = new Battler(this.player, target);
                     var results = battler.FightToTheDeath();
 
-                    var winnerMessage = results.Winner == player ? "you vanquish your foe!" : "you collapse to the ground in a heap!";
+                    var winnerMessage = results.Winner == player ? $"you vanquish your foe! You had {player.CurrentHealth} out of {player.TotalHealth} health." : $"you collapse to the ground in a heap! (The {target.Name} had {target.CurrentHealth} out of {target.TotalHealth} health.)";
                     SpeakAndPrint($"You attack the {target.Name}! After {results.RoundMessages.Length} rounds, {winnerMessage}");
+                    player.CurrentHealth = player.TotalHealth;
                 }
             }
         }
