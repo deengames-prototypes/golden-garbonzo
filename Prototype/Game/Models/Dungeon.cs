@@ -42,6 +42,7 @@ namespace Prototype.Game.Models
                 }
 
                 room.ConnectTo(target);
+                target.ConnectTo(room);
             }
         }
     }
