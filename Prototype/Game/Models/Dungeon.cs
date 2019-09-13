@@ -26,7 +26,7 @@ namespace Prototype.Game.Models
             {
                 // 40% chance of an empty room
                 var numMonsters = random.NextDouble() <= GlobalConfig.PROBABILITY_OF_NO_MONSTERS ?
-                    0 : random.Next(GlobalConfig.MIN_MONSTERS, GlobalConfig.MAX_MONSTERS);
+                    0 : random.Next(GlobalConfig.MIN_MONSTERS_PER_FLOOR, GlobalConfig.MAX_MONSTERS_PER_FLOOR);
 
                 var room = new Room(numMonsters);
                 // Guaranteed connectedness: each room connects to the next

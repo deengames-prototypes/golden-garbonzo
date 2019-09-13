@@ -9,8 +9,8 @@ namespace Prototype.Game
         public static int MAX_ROOMS_PER_FLOOR = 8;
 
         // PER ROOM
-        public static int MIN_MONSTERS = 1;
-        public static int MAX_MONSTERS = 2;
+        public static int MIN_MONSTERS_PER_FLOOR = 2;
+        public static int MAX_MONSTERS_PER_FLOOR = 4;
         public static float PROBABILITY_OF_NO_MONSTERS = 0f;
         public static Dictionary<MonsterType, float> MONSTER_PROBABILITY = new Dictionary<MonsterType, float>()
         {
