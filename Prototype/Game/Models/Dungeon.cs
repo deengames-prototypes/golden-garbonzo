@@ -13,6 +13,30 @@ namespace Prototype.Game.Models
 
         public Dungeon()
         {
+            GenerateAndConnectRooms();
+            RandomlyConnectRooms();
+        }
+
+        private void RandomlyConnectRooms()
+        {
+            // Also connect each room to a random target
+            for (var i = 0; i < this.Rooms.Count; i++)
+            {
+                var room = this.Rooms[i];
+                var target = room;
+
+                while (target == room || room.IsConnectedTo(target))
+                {
+                    target = this.Rooms[random.Next(this.Rooms.Count)];
+                }
+
+                room.ConnectTo(target);
+                target.ConnectTo(room);
+            }
+        }
+
+        private void GenerateAndConnectRooms()
+        {
             var numRooms = random.Next(GlobalConfig.MIN_ROOMS_PER_FLOOR, GlobalConfig.MAX_ROOMS_PER_FLOOR); // 5-8 rooms
             while (this.Rooms.Count < numRooms)
             {
@@ -28,21 +52,6 @@ namespace Prototype.Game.Models
                 }
 
                 this.Rooms.Add(room);
-            }
-
-            // Also connect each room to a random target
-            for (var i = 0; i < this.Rooms.Count; i++)
-            {
-                var room = this.Rooms[i];
-                var target = room;
-
-                while (target == room || room.IsConnectedTo(target))
-                {
-                    target = this.Rooms[random.Next(this.Rooms.Count)];
-                }
-
-                room.ConnectTo(target);
-                target.ConnectTo(room);
             }
         }
     }
