@@ -40,7 +40,7 @@ namespace Prototype.Game.Battle
         {
             var damage = attacker.Strength - defender.Defense;
             defender.CurrentHealth -= damage;
-            var message = $"{attacker.Name} attacks {defender.Name} for {damage} damage!";
+            var message = $"{attacker.Name} with {attacker.CurrentHealth} health attacks for {damage} damage";
             return message;
         }
     }

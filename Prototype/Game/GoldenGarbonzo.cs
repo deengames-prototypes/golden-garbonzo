@@ -95,10 +95,21 @@ namespace Prototype.Game
                     var target = this.currentRoom.GetMonster(targetName);
                     var battler = new Battler(this.player, target);
                     var results = battler.FightToTheDeath();
-
                     var winnerMessage = results.Winner == player ? $"you vanquish your foe! You had {player.CurrentHealth} out of {player.TotalHealth} health." : $"you collapse to the ground in a heap! (The {target.Name} had {target.CurrentHealth} out of {target.TotalHealth} health.)";
-                    SpeakAndPrint($"You attack the {target.Name}! After {results.RoundMessages.Length} rounds, {winnerMessage}");
                     player.CurrentHealth = player.TotalHealth;
+                    SpeakAndPrint($"You attack a {target.Name}!");
+
+                    switch (Options.CombatType)
+                    {
+                        case CombatType.RoundByRound:
+                            foreach (var round in results.RoundMessages)
+                            {
+                                SpeakAndPrint(round);
+                            }
+                            break;
+                    }
+
+                    SpeakAndPrint($"After {results.RoundMessages.Length} rounds, {winnerMessage}");
                 }
             }
         }
