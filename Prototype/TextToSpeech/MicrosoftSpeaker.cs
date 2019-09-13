@@ -116,18 +116,21 @@ namespace Prototype.TextToSpeech
 
         private void OnUpdate()
         {
-            // Break up if statement to isolate random null reference exception
-            if (this.lastSpoken != null)
+            // Concurrent access to this.lastSpoken; sometimes this.lastSpoken is not null but immediately this.lastSpoken.IsCompleted
+            // throws a null exception. Wierd.
+
+            try
             {
-                if (this.lastSpoken.IsCompleted)
+                if (this.lastSpoken != null && this.lastSpoken.IsCompleted && this.queueToSpeak.Count > 0)
                 {
-                    if (this.queueToSpeak.Count > 0)
-                    {
-                        var text = this.queueToSpeak[0];
-                        this.queueToSpeak.RemoveAt(0);
-                        this.lastSpoken = synthesizer.SpeakAsync(text);
-                    }
+                    var text = this.queueToSpeak[0];
+                    this.queueToSpeak.RemoveAt(0);
+                    this.lastSpoken = synthesizer.SpeakAsync(text);
                 }
+            }
+            finally
+            {
+
             }
         }
     }
