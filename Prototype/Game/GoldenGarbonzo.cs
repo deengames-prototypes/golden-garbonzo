@@ -3,6 +3,7 @@ using Prototype.Game.Models;
 using Prototype.TextToSpeech;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Prototype.Game
 {
@@ -47,6 +48,7 @@ namespace Prototype.Game
             this.SpeakAndPrint("Bye!");
         }
 
+        // TODO: extract to class. Extract each command into a subclass.
         private void ProcessInput(string input)
         {
             var inputTokens = input.ToUpperInvariant().Split(' ');
@@ -70,6 +72,11 @@ namespace Prototype.Game
                 case "GO":
                 case "G":
                     this.ProcessMove(inputTokens);
+                    break;
+                case "INVENTORY":
+                case "INV":
+                case "I":
+                    this.ListInventory();
                     break;
                 case "OPTIONS":
                 case "O":
@@ -121,7 +128,7 @@ namespace Prototype.Game
                     {
                         var item = target.Item;
                         player.Inventory.Add(item);
-                        this.SpeakAndPrint($"The {target.Name} drops a {item.GetType().Name}. You pick it up.");
+                        this.SpeakAndPrint($"The {target.Name} drops a {item.Name}. You pick it up.");
                         target.Item = null;
                     }
                 }
@@ -173,6 +180,19 @@ namespace Prototype.Game
                             break;
                     }
                 }
+            }
+        }
+
+        private void ListInventory()
+        {
+            if (player.Inventory.Any())
+            {
+                this.SpeakAndPrint($"You're carrying {player.Inventory.Count} items:");
+                player.Inventory.ForEach(item => this.SpeakAndPrint($"a {item.Name}, "));
+            }
+            else
+            {
+                this.SpeakAndPrint("You are not carrying anything.");
             }
         }
 

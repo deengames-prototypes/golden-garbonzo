@@ -2,5 +2,8 @@
 {
     abstract class AbstractItem
     {
+        public string Name {  get {
+                return this.GetType().Name;
+        } }
     }
 }
