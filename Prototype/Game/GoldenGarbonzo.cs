@@ -55,18 +55,25 @@ namespace Prototype.Game
             switch (command)
             {
                 case "HELP":
-                    SpeakAndPrint("Type 'quit' to quit, 'list' or 'l' to list the current room.");
+                    SpeakAndPrint("Type 'quit' to quit, 'list' or 'l' to list the current room; type ATTACK to attack a target, or OPTIONS to change options");
                     break;
                 case "LIST":
                 case "L":
                     SpeakAndPrint(this.currentRoom.GetContents());
                     break;
                 case "ATTACK":
+                case "FIGHT":
+                case "A":
+                case "F":
                     this.ProcessAttack(inputTokens);
                     break;
                 case "GO":
                 case "G":
                     this.ProcessMove(inputTokens);
+                    break;
+                case "OPTIONS":
+                case "O":
+                    this.ProcessOptions(inputTokens);
                     break;
                 case "QUIT":
                 case "Q":
@@ -132,6 +139,32 @@ namespace Prototype.Game
                     this.currentRoom = this.currentRoom.GetConnection(targetName);
                     SpeakAndPrint(this.currentRoom.GetContents());
 
+                }
+            }
+        }
+
+        private void ProcessOptions(string[] inputTokens)
+        {
+            if (inputTokens.Length != 2)
+            {
+                this.SpeakAndPrint($"Type options combat to change the combat style. It's currently set to {Options.CombatType}.");
+            }
+            else
+            {
+                var targetName = inputTokens[1].ToUpperInvariant();
+                if (targetName != "COMBAT")
+                {
+                    SpeakAndPrint($"There doesn't seem to be a {targetName} option. Valid options are: COMBAT");
+                }
+                else
+                {
+                    switch (targetName)
+                    {
+                        case "COMBAT":
+                            Options.CombatType = Options.CombatType == CombatType.RoundByRound ? CombatType.Summary : CombatType.RoundByRound;
+                            this.SpeakAndPrint($"Combat changed to {Options.CombatType.ToString()}");
+                            break;
+                    }
                 }
             }
         }
