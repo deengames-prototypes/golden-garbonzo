@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Prototype.Game.Models.Items;
+using System;
 
 namespace Prototype.Game.Models
 {
@@ -9,6 +10,7 @@ namespace Prototype.Game.Models
         public string Name { get; set; }
         public int Strength { get; set; }
         public int Defense { get; set; }
+        public AbstractItem Item { get; set; }
 
         public static Monster Generate(MonsterType type)
         {

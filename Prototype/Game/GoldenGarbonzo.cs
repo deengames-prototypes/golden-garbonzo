@@ -117,6 +117,13 @@ namespace Prototype.Game
                     }
 
                     SpeakAndPrint($"After {results.RoundMessages.Length} rounds, {winnerMessage}");
+                    if (results.Winner == player && target.Item != null)
+                    {
+                        var item = target.Item;
+                        player.Inventory.Add(item);
+                        this.SpeakAndPrint($"The {target.Name} drops a {item.GetType().Name}. You pick it up.");
+                        target.Item = null;
+                    }
                 }
             }
         }

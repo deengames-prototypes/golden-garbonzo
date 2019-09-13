@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Prototype.Game.Models.Items;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,26 +14,9 @@ namespace Prototype.Game.Models
 
         public Dungeon()
         {
-            GenerateAndConnectRooms();
-            RandomlyConnectRooms();
-        }
-
-        private void RandomlyConnectRooms()
-        {
-            // Also connect each room to a random target
-            for (var i = 0; i < this.Rooms.Count; i++)
-            {
-                var room = this.Rooms[i];
-                var target = room;
-
-                while (target == room || room.IsConnectedTo(target))
-                {
-                    target = this.Rooms[random.Next(this.Rooms.Count)];
-                }
-
-                room.ConnectTo(target);
-                target.ConnectTo(room);
-            }
+            this.GenerateAndConnectRooms();
+            this.RandomlyConnectRooms();
+            this.CreateKey();
         }
 
         private void GenerateAndConnectRooms()
@@ -53,6 +37,34 @@ namespace Prototype.Game.Models
 
                 this.Rooms.Add(room);
             }
+        }
+
+        private void RandomlyConnectRooms()
+        {
+            // Also connect each room to a random target
+            for (var i = 0; i < this.Rooms.Count; i++)
+            {
+                var room = this.Rooms[i];
+                var target = room;
+
+                while (target == room || room.IsConnectedTo(target))
+                {
+                    target = this.Rooms[random.Next(this.Rooms.Count)];
+                }
+
+                room.ConnectTo(target);
+                target.ConnectTo(room);
+            }
+        }
+
+        private void CreateKey()
+        {
+            var allMonsters = new List<Monster>();
+            this.Rooms.ForEach(r => allMonsters.AddRange(r.Monsters));
+
+            var whichMonster = random.Next(allMonsters.Count);
+            var monster = allMonsters[whichMonster];
+            monster.Item = new DoorKey();
         }
     }
 }
