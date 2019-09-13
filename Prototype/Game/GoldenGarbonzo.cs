@@ -188,7 +188,11 @@ namespace Prototype.Game
             if (player.Inventory.Any())
             {
                 this.SpeakAndPrint($"You're carrying {player.Inventory.Count} items:");
-                player.Inventory.ForEach(item => this.SpeakAndPrint($"a {item.Name}, "));
+                for (var i = 0; i < player.Inventory.Count; i++)
+                {
+                    var item = player.Inventory[i];
+                    this.SpeakAndPrint($"Item #{i + 1}: {item.Name}: {item.Description}");
+                }
             }
             else
             {
