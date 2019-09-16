@@ -16,7 +16,7 @@ namespace Prototype.Game.Models
             {
                 case MonsterType.Weak: return new Monster("Slime", 8, 5, 1);
                 case MonsterType.Regular: return new Monster("Blue Beak", 20, 8, 3);
-                case MonsterType.Strong: return new Monster("Wolf", 50, 12, 5);
+                case MonsterType.Strong: return new Monster("Goblin", 50, 12, 5);
             }
 
             throw new InvalidOperationException($"Not sure how to create a monster of type: {type}");

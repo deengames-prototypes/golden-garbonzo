@@ -9,21 +9,16 @@ namespace Prototype.Game.Models
     {
         private static Random random = new Random();
 
-        private static readonly List<string> unusedRoomIds = new List<string>()
-        {
-            "Ape", "Bison", "Cat", "Dog", "Eagle", "Fish", "Goat", "Hamster", "Kangaroo", "Lion",
-            "Monkey", "Nighthawk", "Oppossum", "Pony", "Raccoon", "Seal", "Tiger", "Whale", "Yak", "Zebra"
-        };
-
         public string Id { get; private set;  }
         public readonly List<Monster> Monsters = new List<Monster>();
 
+        private readonly int floorNum;
         private readonly List<Room> connectedTo = new List<Room>();
 
-        public Room(int numMonsters)
+        public Room(int floorNum, string id, int numMonsters)
         {
-            this.Id = unusedRoomIds[random.Next(unusedRoomIds.Count)];
-            unusedRoomIds.Remove(this.Id);
+            this.Id = id;
+            this.floorNum = floorNum;
             this.GenerateMonsters(numMonsters);
         }
 
@@ -50,7 +45,7 @@ namespace Prototype.Game.Models
             var builder = new StringBuilder();
             var aliveMonsters = this.Monsters.Where(m => m.CurrentHealth > 0);
             string numberOfMonsters = aliveMonsters.Any() ? $"the following {aliveMonsters.Count()}" : "no";
-            builder.Append($"You are in the {this.Id} room. ");
+            builder.Append($"You are in the {this.Id} room on floor {this.floorNum}F. ");
 
             builder.Append($"This room contains {numberOfMonsters} monsters: ");
             foreach (var monsterGroup in aliveMonsters.GroupBy(m => m.Name))

@@ -17,7 +17,7 @@ namespace Prototype.Game
             this.speaker = new MicrosoftSpeaker();            
 
             var dungeon = new Dungeon();
-            this.currentRoom = dungeon.Rooms[0];
+            this.currentRoom = dungeon.Floors[0].Rooms[0];
 
             SpeakAndPrint($"Welcome to the dungeon! {this.currentRoom.GetContents()}");
             SpeakAndPrint("Type something and press enter. Type 'help' for help, or 'quit' to quit.");

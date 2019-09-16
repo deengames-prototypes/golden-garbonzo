@@ -47,6 +47,7 @@
     <Compile Include="Game\Battle\Battler.cs" />
     <Compile Include="Game\GoldenGarbonzo.cs" />
     <Compile Include="Game\Models\Dungeon.cs" />
+    <Compile Include="Game\Models\Floor.cs" />
     <Compile Include="Game\Models\Monster.cs" />
     <Compile Include="Game\Models\Player.cs" />
     <Compile Include="Game\Models\Room.cs" />
