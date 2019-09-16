@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Prototype.Game.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,11 @@ namespace Prototype.Game.Models
         public string Id { get; private set;  }
         public readonly List<Monster> Monsters = new List<Monster>();
 
+        internal StairsType Stairs = StairsType.NONE;
+
         private readonly int floorNum;
         private readonly List<Room> connectedTo = new List<Room>();
+        private bool isLocked = false;
 
         public Room(int floorNum, string id, int numMonsters)
         {
@@ -63,6 +67,11 @@ namespace Prototype.Game.Models
                     builder.Append(" and ");
                 }
             };
+
+            if (this.Stairs != StairsType.NONE)
+            {
+                builder.Append($". You see stairs going {(this.Stairs == StairsType.NEXT_FLOOR ? "down" : "up")}.");
+            }
 
             return builder.ToString();
         }

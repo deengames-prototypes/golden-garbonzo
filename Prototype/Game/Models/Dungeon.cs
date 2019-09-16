@@ -11,9 +11,9 @@ namespace Prototype.Game.Models
         public Dungeon()
         {
             var numFloors = GlobalConfig.NUM_FLOORS;
-            for (var i = 0; i < numFloors; i++)
+            for (var i = 1; i <= numFloors; i++)
             {
-                this.Floors.Add(new Floor(i + 1));
+                this.Floors.Add(new Floor(i));
             }
         }
     }

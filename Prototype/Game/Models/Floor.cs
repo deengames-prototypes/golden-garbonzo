@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Prototype.Game.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -51,6 +52,17 @@ namespace Prototype.Game.Models
 
                 room.ConnectTo(target);
                 target.ConnectTo(room);
+            }
+
+            // Predictably, first and last room are stairs up/down respectively.
+            if (floorNum > 1)
+            {
+                this.Rooms[0].Stairs = StairsType.PREVIOUS_FLOOR;
+            }
+
+            if (floorNum < GlobalConfig.NUM_FLOORS)
+            {
+                this.Rooms.Last().Stairs = StairsType.NEXT_FLOOR;
             }
         }
     }

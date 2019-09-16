@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game\Battle\Battler.cs" />
+    <Compile Include="Game\Enums\StairsType.cs" />
     <Compile Include="Game\GoldenGarbonzo.cs" />
     <Compile Include="Game\Models\Dungeon.cs" />
     <Compile Include="Game\Models\Floor.cs" />
