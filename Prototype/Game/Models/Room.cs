@@ -12,7 +12,7 @@ namespace Prototype.Game.Models
         private static readonly List<string> unusedRoomIds = new List<string>()
         {
             "Ape", "Bison", "Cat", "Dog", "Eagle", "Fish", "Goat", "Hamster", "Kangaroo", "Lion",
-            "Monkey", "Newt", "Oppossum", "Pony", "Raccoon", "Seal", "Tiger", "Whale", "Yak", "Zebra"
+            "Monkey", "Nighthawk", "Oppossum", "Pony", "Raccoon", "Seal", "Tiger", "Whale", "Yak", "Zebra"
         };
 
         public string Id { get; private set;  }
