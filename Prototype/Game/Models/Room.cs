@@ -80,7 +80,7 @@ namespace Prototype.Game.Models
 
             if (this.Stairs != StairsType.NONE)
             {
-                builder.Append($". You see an elevator that goes {(this.Stairs == StairsType.NEXT_FLOOR ? "down" : "up")}.");
+                builder.Append($". You see stairs leading {(this.Stairs == StairsType.NEXT_FLOOR ? "down" : "up")}.");
             }
 
             return builder.ToString();
