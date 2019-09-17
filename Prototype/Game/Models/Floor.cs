@@ -11,7 +11,7 @@ namespace Prototype.Game.Models
 
         internal List<Room> Rooms = new List<Room>();
 
-        private static readonly List<string> unusedRoomIds = new List<string>()
+        private readonly List<string> unusedRoomIds = new List<string>()
         {
             "Ape", "Bison", "Cat", "Dog", "Eagle", "Fish", "Goat", "Hamster", "Kangaroo", "Lion",
             "Monkey", "Nighthawk", "Oppossum", "Pony", "Raccoon", "Seal", "Tiger", "Whale", "Yak", "Zebra"
@@ -64,6 +64,20 @@ namespace Prototype.Game.Models
             {
                 this.Rooms.Last().Stairs = StairsType.NEXT_FLOOR;
             }
+        }
+
+        public void SealRandomRoom()
+        {
+            var roomIndex = 0;
+            
+            // Don't seal the starting/final rooms (with stairs)
+            while (roomIndex == 0 || roomIndex == this.Rooms.Count - 1)
+            {
+                roomIndex = random.Next(this.Rooms.Count - 1);
+            }
+
+            var sealedRoom = this.Rooms[roomIndex];
+            sealedRoom.IsSealed = true;
         }
     }
 }

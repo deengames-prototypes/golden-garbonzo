@@ -17,7 +17,12 @@ namespace Prototype.Game
             this.speaker = new MicrosoftSpeaker();            
 
             var dungeon = new Dungeon();
-            this.currentRoom = dungeon.Floors[0].Rooms[0];
+            var floors = dungeon.Floors;
+            
+            this.currentRoom = floors[0].Rooms[0];
+
+            // TODO: this should probably be more random. For now, it's a progression of difficulty, amirite?
+            floors.ForEach(f => f.SealRandomRoom());
 
             SpeakAndPrint($"Welcome to the dungeon! {this.currentRoom.GetContents()}");
             SpeakAndPrint("Type something and press enter. Type 'help' for help, or 'quit' to quit.");
@@ -111,16 +116,23 @@ namespace Prototype.Game
             }
             else
             {
-                var targetName = inputTokens[1];
-                if (!this.currentRoom.IsConnectedTo(targetName))
+                if (this.currentRoom.IsSealed)
                 {
-                    SpeakAndPrint($"There doesn't seem to be a way to go to {targetName} from here.");
+                    SpeakAndPrint("You can't leave - all the doors are sealed shut!");
                 }
                 else
                 {
-                    this.currentRoom = this.currentRoom.GetConnection(targetName);
-                    SpeakAndPrint(this.currentRoom.GetContents());
+                    var targetName = inputTokens[1];
+                    if (!this.currentRoom.IsConnectedTo(targetName))
+                    {
+                        SpeakAndPrint($"There doesn't seem to be a way to go to {targetName} from here.");
+                    }
+                    else
+                    {
+                        this.currentRoom = this.currentRoom.GetConnection(targetName);
+                        SpeakAndPrint(this.currentRoom.GetContents());
 
+                    }
                 }
             }
         }

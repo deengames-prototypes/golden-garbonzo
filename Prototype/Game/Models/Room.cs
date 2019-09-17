@@ -12,6 +12,7 @@ namespace Prototype.Game.Models
 
         public string Id { get; private set;  }
         public readonly List<Monster> Monsters = new List<Monster>();
+        public bool IsSealed { get; set; }
 
         internal StairsType Stairs = StairsType.NONE;
 
@@ -49,6 +50,7 @@ namespace Prototype.Game.Models
             var builder = new StringBuilder();
             var aliveMonsters = this.Monsters.Where(m => m.CurrentHealth > 0);
             string numberOfMonsters = aliveMonsters.Any() ? $"the following {aliveMonsters.Count()}" : "no";
+
             builder.Append($"You are in the {this.Id} room on floor {this.floorNum}F. ");
 
             builder.Append($"This room contains {numberOfMonsters} monsters: ");
@@ -57,16 +59,24 @@ namespace Prototype.Game.Models
                 builder.Append($"{monsterGroup.Count()} {monsterGroup.Key}s, ");
             }
 
-            builder.Append(" This room connects to ");
-            foreach (var room in this.connectedTo)
-            {
-                builder.Append($"The {room.Id} room, ");
 
-                if (this.connectedTo.Count > 1 && room == this.connectedTo[this.connectedTo.Count - 2])
+            if (!this.IsSealed)
+            {
+                builder.Append(" This room connects to ");
+                foreach (var room in this.connectedTo)
                 {
-                    builder.Append(" and ");
-                }
-            };
+                    builder.Append($"The {room.Id} room, ");
+
+                    if (this.connectedTo.Count > 1 && room == this.connectedTo[this.connectedTo.Count - 2])
+                    {
+                        builder.Append(" and ");
+                    }
+                };
+            }
+            else
+            {
+                builder.Append("All the doors are sealed shut!");
+            }
 
             if (this.Stairs != StairsType.NONE)
             {
