@@ -18,7 +18,7 @@ namespace Prototype.Game.Models
             {
                 case MonsterType.Weak: return new Monster("Slime", 8, 5, 1);
                 case MonsterType.Regular: return new Monster("Blue Beak", 20, 8, 3);
-                //case MonsterType.Strong: return new Monster("Wolf", 40, 10, 4);
+                case MonsterType.Strong: return new Monster("Goblin", 40, 12, 5);
                 default: return new Monster("Bat", 10, 6, 2);
             }
 
