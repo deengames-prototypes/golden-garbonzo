@@ -80,7 +80,7 @@ namespace Prototype.Game.Models
 
             if (this.Stairs != StairsType.NONE)
             {
-                builder.Append($". You see stairs going {(this.Stairs == StairsType.NEXT_FLOOR ? "down" : "up")}.");
+                builder.Append($". You see an elevator that goes {(this.Stairs == StairsType.NEXT_FLOOR ? "down" : "up")}.");
             }
 
             return builder.ToString();
@@ -128,7 +128,7 @@ namespace Prototype.Game.Models
                         }
                         else
                         {
-                            throw new InvalidOperationException("Random-weight algorithm is wrong");
+                            throw new InvalidOperationException("Random-weight algorithm is broken");
                         }
                     }
                 }
