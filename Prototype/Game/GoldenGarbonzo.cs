@@ -3,6 +3,7 @@ using Prototype.Game.Models;
 using Prototype.TextToSpeech;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Prototype.Game
 {
@@ -67,6 +68,9 @@ namespace Prototype.Game
                     SpeakAndPrint(this.currentRoom.GetContents());
                     break;
                 case "ATTACK":
+                case "A":
+                case "FIGHT":
+                case "F":
                     this.ProcessAttack(inputTokens);
                     break;
                 case "GO":
@@ -75,6 +79,7 @@ namespace Prototype.Game
                     break;
                 case "QUIT":
                 case "Q":
+                case "EXIT":
                     return;
                 default:
                     SpeakAndPrint($"Not sure how to {input}");
@@ -104,6 +109,12 @@ namespace Prototype.Game
                     var winnerMessage = results.Winner == player ? $"you vanquish your foe! You had {player.CurrentHealth} out of {player.TotalHealth} health." : $"you collapse to the ground in a heap! (The {target.Name} had {target.CurrentHealth} out of {target.TotalHealth} health.)";
                     SpeakAndPrint($"You attack the {target.Name}! After {results.RoundMessages.Length} rounds, {winnerMessage}");
                     player.CurrentHealth = player.TotalHealth;
+
+                    if (this.currentRoom.IsSealed && !this.currentRoom.Monsters.Any(m => m.CurrentHealth > 0) && results.Winner == player)
+                    {
+                        this.currentRoom.IsSealed = false;
+                        SpeakAndPrint("The magic seals on all the doors dissipate.");
+                    }
                 }
             }
         }
