@@ -116,12 +116,15 @@ namespace Prototype.TextToSpeech
 
         private void OnUpdate()
         {
-            if (this.lastSpoken != null && this.lastSpoken.IsCompleted && this.queueToSpeak.Count > 0)
+            try
             {
-                var text = this.queueToSpeak[0];
-                this.queueToSpeak.RemoveAt(0);
-                this.lastSpoken = synthesizer.SpeakAsync(text);
-            }
+                if (this.lastSpoken != null && this.lastSpoken.IsCompleted && this.queueToSpeak.Count > 0)
+                {
+                    var text = this.queueToSpeak[0];
+                    this.queueToSpeak.RemoveAt(0);
+                    this.lastSpoken = synthesizer.SpeakAsync(text);
+                }
+            } finally {  } // ignore sporadic race-condition where lastSpoken != null but then lastSpoken.IsCompleted is null
         }
     }
 }
