@@ -18,7 +18,12 @@ namespace Prototype.Game
             this.speaker = new MicrosoftSpeaker();            
 
             var dungeon = new Dungeon();
-            this.currentRoom = dungeon.Floors[0].Rooms[0];
+            var floors = dungeon.Floors;
+            
+            this.currentRoom = floors[0].Rooms[0];
+
+            // TODO: this should probably be more random. For now, it's a progression of difficulty, amirite?
+            floors.ForEach(f => f.SealRandomRoom());
 
             SpeakAndPrint($"Welcome to the dungeon! {this.currentRoom.GetContents()}");
             SpeakAndPrint("Type something and press enter. Type 'help' for help, or 'quit' to quit.");
@@ -64,8 +69,8 @@ namespace Prototype.Game
                     SpeakAndPrint(this.currentRoom.GetContents());
                     break;
                 case "ATTACK":
-                case "FIGHT":
                 case "A":
+                case "FIGHT":
                 case "F":
                     this.ProcessAttack(inputTokens);
                     break;
@@ -84,6 +89,7 @@ namespace Prototype.Game
                     break;
                 case "QUIT":
                 case "Q":
+                case "EXIT":
                     return;
                 default:
                     SpeakAndPrint($"Not sure how to {input}");
@@ -131,6 +137,12 @@ namespace Prototype.Game
                         this.SpeakAndPrint($"The {target.Name} drops a {item.Name}. You pick it up.");
                         target.Item = null;
                     }
+                    
+                    if (this.currentRoom.IsSealed && !this.currentRoom.Monsters.Any(m => m.CurrentHealth > 0) && results.Winner == player)
+                    {
+                        this.currentRoom.IsSealed = false;
+                        SpeakAndPrint("The magic seals on all the doors dissipate.");
+                    }
                 }
             }
         }
@@ -143,16 +155,23 @@ namespace Prototype.Game
             }
             else
             {
-                var targetName = inputTokens[1];
-                if (!this.currentRoom.IsConnectedTo(targetName))
+                if (this.currentRoom.IsSealed)
                 {
-                    SpeakAndPrint($"There doesn't seem to be a way to go to {targetName} from here.");
+                    SpeakAndPrint("You can't leave - all the doors are sealed shut!");
                 }
                 else
                 {
-                    this.currentRoom = this.currentRoom.GetConnection(targetName);
-                    SpeakAndPrint(this.currentRoom.GetContents());
+                    var targetName = inputTokens[1];
+                    if (!this.currentRoom.IsConnectedTo(targetName))
+                    {
+                        SpeakAndPrint($"There doesn't seem to be a way to go to {targetName} from here.");
+                    }
+                    else
+                    {
+                        this.currentRoom = this.currentRoom.GetConnection(targetName);
+                        SpeakAndPrint(this.currentRoom.GetContents());
 
+                    }
                 }
             }
         }

@@ -118,7 +118,6 @@ namespace Prototype.TextToSpeech
         {
             // Concurrent access to this.lastSpoken; sometimes this.lastSpoken is not null but immediately this.lastSpoken.IsCompleted
             // throws a null exception. Wierd.
-
             try
             {
                 if (this.lastSpoken != null && this.lastSpoken.IsCompleted && this.queueToSpeak.Count > 0)
