@@ -66,7 +66,7 @@ namespace Prototype.Game.Models
             }
         }
 
-        private void CreateKey()
+        public void CreateKeyAndLockRandomRoom()
         {
             var allMonsters = new List<Monster>();
             this.Rooms.ForEach(r => allMonsters.AddRange(r.Monsters));
@@ -74,6 +74,8 @@ namespace Prototype.Game.Models
             var whichMonster = random.Next(allMonsters.Count);
             var monster = allMonsters[whichMonster];
             monster.Item = new DoorKey();
+
+            var DEBUG = this.Rooms.Single(r => r.Monsters.Contains(monster));
         }
         
         public void SealRandomRoom()

@@ -127,7 +127,7 @@ namespace Prototype.TextToSpeech
                     this.lastSpoken = synthesizer.SpeakAsync(text);
                 }
             }
-            finally
+            catch
             {
 
             }

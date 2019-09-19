@@ -1,4 +1,5 @@
 ﻿using Prototype.Game.Enums;
+using Prototype.Game.Models.Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace Prototype.Game.Models
         private readonly int floorNum;
         private readonly List<Room> connectedTo = new List<Room>();
         private bool isLocked = false;
+        private List<AbstractItem> items = new List<AbstractItem>();
 
         public Room(int floorNum, string id, int numMonsters)
         {
@@ -133,6 +135,17 @@ namespace Prototype.Game.Models
                     }
                 }
             }
+        }
+
+        internal void AddItem(AbstractItem item)
+        {
+            this.items.Add(item);
+        }
+
+        internal AbstractItem RemoveItem(string itemName)
+        {
+            var item = this.items.FirstOrDefault(i => i.Name.ToUpperInvariant().Contains(itemName.ToUpperInvariant()));
+            return item;
         }
     }
 }

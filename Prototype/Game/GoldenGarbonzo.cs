@@ -22,9 +22,6 @@ namespace Prototype.Game
             
             this.currentRoom = floors[0].Rooms[0];
 
-            // TODO: this should probably be more random. For now, it's a progression of difficulty, amirite?
-            floors.ForEach(f => f.SealRandomRoom());
-
             SpeakAndPrint($"Welcome to the dungeon! {this.currentRoom.GetContents()}");
             SpeakAndPrint("Type something and press enter. Type 'help' for help, or 'quit' to quit.");
 
@@ -73,6 +70,9 @@ namespace Prototype.Game
                 case "FIGHT":
                 case "F":
                     this.ProcessAttack(inputTokens);
+                    break;
+                case "GET":
+                    this.ProcessGet(inputTokens);
                     break;
                 case "GO":
                 case "G":
@@ -133,8 +133,8 @@ namespace Prototype.Game
                     if (results.Winner == player && target.Item != null)
                     {
                         var item = target.Item;
-                        player.Inventory.Add(item);
-                        this.SpeakAndPrint($"The {target.Name} drops a {item.Name}. You pick it up.");
+                        this.currentRoom.AddItem(item);
+                        this.SpeakAndPrint($"The {target.Name} drops a {item.Name}.");
                         target.Item = null;
                     }
                     
@@ -149,7 +149,7 @@ namespace Prototype.Game
 
         private void ProcessMove(string[] inputTokens)
         {
-            if(inputTokens.Length != 2)
+            if (inputTokens.Length != 2)
             {
                 SpeakAndPrint("Type go and then the room to go to. Type list to list connected rooms.");
             }
@@ -172,6 +172,28 @@ namespace Prototype.Game
                         SpeakAndPrint(this.currentRoom.GetContents());
 
                     }
+                }
+            }
+        }
+
+        private void ProcessGet(string[] inputTokens)
+        {
+            if (inputTokens.Length != 2)
+            {
+                SpeakAndPrint("Type get and then the item to get. Type list to list all items in this room.");
+            }
+            else
+            {
+                var targetName = inputTokens[1];
+                var wasRemoved = this.currentRoom.RemoveItem(targetName);
+                if (wasRemoved != null)
+                {
+                    this.player.Inventory.Add(wasRemoved);
+                    SpeakAndPrint($"You pick up the {wasRemoved.Name}");
+                }
+                else
+                {
+                    SpeakAndPrint($"There doesn't seem to be a {targetName} here.");
                 }
             }
         }
