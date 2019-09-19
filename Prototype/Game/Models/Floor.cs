@@ -77,8 +77,6 @@ namespace Prototype.Game.Models
             var whichMonster = random.Next(allMonsters.Count);
             var monster = allMonsters[whichMonster];
             monster.Item = new DoorKey();
-
-            Console.WriteLine($"Key in the {this.Rooms.Single(r => r.Monsters.Any(m => m.Item != null && m.Item.Name.Contains("Key"))).Id} room, held by a {monster.Name}");
         }
         
         public void SealRandomRoom()

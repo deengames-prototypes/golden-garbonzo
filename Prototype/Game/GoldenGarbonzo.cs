@@ -1,5 +1,6 @@
 ﻿using Prototype.Game.Battle;
 using Prototype.Game.Models;
+using Prototype.Game.Models.Items;
 using Prototype.TextToSpeech;
 using System;
 using System.Collections.Generic;
@@ -171,7 +172,7 @@ namespace Prototype.Game
                         var targetRoom = this.currentRoom.GetConnection(targetName); // validates the typed name is a real room that exists
                         if (targetRoom.IsLocked)
                         {
-                            if (this.player.Inventory.Any(i => i.Name == "DoorKey"))
+                            if (this.player.Inventory.Any(i => i is DoorKey))
                             {
                                 SpeakAndPrint($"You unlock the {targetRoom.Id} room and go in.");
                                 this.currentRoom = targetRoom;
