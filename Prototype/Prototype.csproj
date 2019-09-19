@@ -47,10 +47,12 @@
     <Compile Include="Game\Battle\Battler.cs" />
     <Compile Include="Game\Enums\StairsType.cs" />
     <Compile Include="Game\GoldenGarbonzo.cs" />
+    <Compile Include="Game\Models\GemSocket.cs" />
     <Compile Include="Game\Models\Items\DoorKey.cs" />
     <Compile Include="Game\Models\Dungeon.cs" />
     <Compile Include="Game\Models\Items\AbstractItem.cs" />
     <Compile Include="Game\Models\Floor.cs" />
+    <Compile Include="Game\Models\Items\Gemstone.cs" />
     <Compile Include="Game\Models\Monster.cs" />
     <Compile Include="Game\Models\Player.cs" />
     <Compile Include="Game\Models\Room.cs" />

@@ -9,7 +9,7 @@ namespace Prototype.Game.Models.Items
         private static List<string> UniqueDescriptions = new List<string>() { "shiny", "smooth", "ridged", "oblong", "round", "angular", "heavy", "bright", "cold", "warm", "metallic" };
         private static int nextId = 0;
 
-        private string id = "";
+        private readonly string id = "";
 
         static Gemstone()
         {

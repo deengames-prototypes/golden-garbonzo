@@ -88,6 +88,7 @@ namespace Prototype.Game
                 case "O":
                     this.ProcessOptions(inputTokens);
                     break;
+                // TODO: use stairs: make sure there is no socket or it's solved
                 case "QUIT":
                 case "Q":
                 case "EXIT":

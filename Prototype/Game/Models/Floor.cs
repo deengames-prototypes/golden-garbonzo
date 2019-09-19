@@ -66,13 +66,32 @@ namespace Prototype.Game.Models
             }
         }
 
+        /// <summary>
+        /// Creates a gem socket in the final room, and hides the stairs.
+        /// </summary>
+        internal void CreateGemSocketAndGems()
+        {
+            var stairsDownRoom = this.Rooms.Single(r => r.Stairs == StairsType.NEXT_FLOOR);
+            stairsDownRoom.CreateGemSocket();
+
+            var allMonsters = new List<Monster>();
+            this.Rooms.ForEach(r => r.Monsters.Where(m => m.Item == null).ToList().ForEach(m => allMonsters.Add(m)));
+
+            // Assumes two gems per socket.
+            var monsters = allMonsters.OrderBy(r => random.Next()).Take(2);
+            foreach (var monster in monsters)
+            {
+                monster.Item = new Gemstone();
+            }
+        }
+
         public void CreateKeyAndLockFinalRoom()
         {
             var roomToLock = this.Rooms.Last();
             roomToLock.IsLocked = true;
 
             var allMonsters = new List<Monster>();
-            this.Rooms.Where(r => r != roomToLock).ToList().ForEach(r => allMonsters.AddRange(r.Monsters));
+            this.Rooms.Where(r => r != roomToLock).ToList().ForEach(r => allMonsters.AddRange(r.Monsters.Where(m => m.Item == null)));
 
             var whichMonster = random.Next(allMonsters.Count);
             var monster = allMonsters[whichMonster];

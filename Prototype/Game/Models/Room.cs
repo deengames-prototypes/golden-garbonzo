@@ -22,6 +22,8 @@ namespace Prototype.Game.Models
         private readonly List<Room> connectedTo = new List<Room>();
         private List<AbstractItem> items = new List<AbstractItem>();
 
+        private GemSocket socket = null;
+
         public Room(int floorNum, string id, int numMonsters)
         {
             this.Id = id;
@@ -80,7 +82,8 @@ namespace Prototype.Game.Models
                 builder.Append("All the doors are sealed shut!");
             }
 
-            if (this.Stairs != StairsType.NONE)
+            // Presence of an incomplete gem socket hides stairs
+            if ((this.Stairs != StairsType.NONE) && (this.socket == null || this.socket.IsSolved()))
             {
                 builder.Append($". You see stairs leading {(this.Stairs == StairsType.NEXT_FLOOR ? "down" : "up")}.");
             }
@@ -91,6 +94,11 @@ namespace Prototype.Game.Models
             }
 
             return builder.ToString();
+        }
+
+        internal void CreateGemSocket()
+        {
+            this.socket = new GemSocket(2);
         }
 
         internal bool IsConnectedTo(Room target)
