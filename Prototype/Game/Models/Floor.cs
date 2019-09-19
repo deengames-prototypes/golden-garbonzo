@@ -66,16 +66,19 @@ namespace Prototype.Game.Models
             }
         }
 
-        public void CreateKeyAndLockRandomRoom()
+        public void CreateKeyAndLockFinalRoom()
         {
+            var roomToLock = this.Rooms.Last();
+            roomToLock.IsLocked = true;
+
             var allMonsters = new List<Monster>();
-            this.Rooms.ForEach(r => allMonsters.AddRange(r.Monsters));
+            this.Rooms.Where(r => r != roomToLock).ToList().ForEach(r => allMonsters.AddRange(r.Monsters));
 
             var whichMonster = random.Next(allMonsters.Count);
             var monster = allMonsters[whichMonster];
             monster.Item = new DoorKey();
 
-            var DEBUG = this.Rooms.Single(r => r.Monsters.Contains(monster));
+            Console.WriteLine($"Key in the {this.Rooms.Single(r => r.Monsters.Any(m => m.Item != null && m.Item.Name.Contains("Key"))).Id} room, held by a {monster.Name}");
         }
         
         public void SealRandomRoom()
@@ -83,7 +86,7 @@ namespace Prototype.Game.Models
             var roomIndex = 0;
             
             // Don't seal the starting/final rooms (with stairs)
-            while (roomIndex == 0 || roomIndex == this.Rooms.Count - 1)
+            while (roomIndex == 0 || roomIndex == this.Rooms.Count - 1 || this.Rooms[roomIndex].IsLocked)
             {
                 roomIndex = random.Next(this.Rooms.Count - 1);
             }

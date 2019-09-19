@@ -16,10 +16,10 @@ namespace Prototype.Game.Models
         public bool IsSealed { get; set; }
 
         internal StairsType Stairs = StairsType.NONE;
+        internal bool IsLocked = false;
 
         private readonly int floorNum;
         private readonly List<Room> connectedTo = new List<Room>();
-        private bool isLocked = false;
         private List<AbstractItem> items = new List<AbstractItem>();
 
         public Room(int floorNum, string id, int numMonsters)
@@ -147,7 +147,12 @@ namespace Prototype.Game.Models
             this.items.Add(item);
         }
 
-        internal AbstractItem RemoveItem(string itemName)
+        internal void RemoveItem(AbstractItem item)
+        {
+            this.items.Remove(item);
+        }
+
+        internal AbstractItem GetItem(string itemName)
         {
             var item = this.items.FirstOrDefault(i => i.Name.ToUpperInvariant().Contains(itemName.ToUpperInvariant()));
             return item;

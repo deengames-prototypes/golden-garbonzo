@@ -168,9 +168,25 @@ namespace Prototype.Game
                     }
                     else
                     {
-                        this.currentRoom = this.currentRoom.GetConnection(targetName);
-                        SpeakAndPrint(this.currentRoom.GetContents());
-
+                        var targetRoom = this.currentRoom.GetConnection(targetName); // validates the typed name is a real room that exists
+                        if (targetRoom.IsLocked)
+                        {
+                            if (this.player.Inventory.Any(i => i.Name == "DoorKey"))
+                            {
+                                SpeakAndPrint($"You unlock the {targetRoom.Id} room and go in.");
+                                this.currentRoom = targetRoom;
+                                SpeakAndPrint(this.currentRoom.GetContents());
+                            }
+                            else
+                            {
+                                SpeakAndPrint($"The {targetRoom.Id} room is locked.");
+                            }
+                        }
+                        else
+                        {
+                            this.currentRoom = targetRoom;
+                            SpeakAndPrint(this.currentRoom.GetContents());
+                        }
                     }
                 }
             }
@@ -185,11 +201,12 @@ namespace Prototype.Game
             else
             {
                 var targetName = inputTokens[1];
-                var wasRemoved = this.currentRoom.RemoveItem(targetName);
-                if (wasRemoved != null)
+                var item = this.currentRoom.GetItem(targetName);
+                if (item != null)
                 {
-                    this.player.Inventory.Add(wasRemoved);
-                    SpeakAndPrint($"You pick up the {wasRemoved.Name}");
+                    this.player.Inventory.Add(item);
+                    this.currentRoom.RemoveItem(item);
+                    SpeakAndPrint($"You pick up the {item.Name}");
                 }
                 else
                 {
