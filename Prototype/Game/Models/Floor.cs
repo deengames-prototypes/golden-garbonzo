@@ -15,7 +15,7 @@ namespace Prototype.Game.Models
         private readonly List<string> unusedRoomIds = new List<string>()
         {
             "Ape", "Bison", "Cat", "Dog", "Eagle", "Fish", "Goat", "Hamster", "Kangaroo", "Lion",
-            "Monkey", "Nighthawk", "Oppossum", "Pony", "Raccoon", "Seal", "Tiger", "Whale", "Yak", "Zebra"
+            "Monkey", "Nighthawk", "Oppossum", "Pony", "Raccoon", "Snail", "Tiger", "Whale", "Yak", "Zebra"
         };
 
         public Floor(int floorNum)
