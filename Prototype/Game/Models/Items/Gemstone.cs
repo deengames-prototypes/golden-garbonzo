@@ -6,7 +6,7 @@ namespace Prototype.Game.Models.Items
 {
     class Gemstone : AbstractItem
     {
-        private static List<string> UniqueDescriptions = new List<string>() { "shiny", "smooth", "ridged", "oblong", "round", "angular", "heavy", "bright", "cold", "warm", "metallic" };
+        private static List<string> UniqueDescriptions = new List<string>() { "shiny", "smooth", "ridged", "oblong", "round", "angular", "heavy", "bumpy", "cold", "warm", "metallic" };
         private static int nextId = 0;
 
         private readonly string id = "";
