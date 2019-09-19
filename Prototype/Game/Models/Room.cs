@@ -85,6 +85,11 @@ namespace Prototype.Game.Models
                 builder.Append($". You see stairs leading {(this.Stairs == StairsType.NEXT_FLOOR ? "down" : "up")}.");
             }
 
+            if (this.items.Any())
+            {
+                this.items.ForEach(i => builder.Append($" You see a {i.Name}. "));
+            }
+
             return builder.ToString();
         }
 
