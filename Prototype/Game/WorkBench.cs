@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Prototype.Game.Models;
 using Prototype.Game.Models.Items;
 using Prototype.Game.Models.Items.Assemblable;
@@ -11,37 +12,17 @@ namespace Prototype.Game
         /// Assembles an item out of constituent elements. Returns true if assembled, false if not.
         /// </summary>
         /// <param name="itemName">The thing to assemble.</param>
-        public bool Assemble(AbstractItem item, Player player)
+        public void Assemble(Type type, Player player)
         {
-            if (this.CheckForAndRemove(player, this.GetPartsFor(item)))
+            var requiredParts = this.GetPartsFor(type);
+            if (this.CanAssemble(type, player))
             {
-                player.Inventory.Add(item);
-                return true;
+                foreach (var itemName in requiredParts)
+                {
+                    var subPart = player.Inventory.Single(i => i.Name.ToUpperInvariant().Contains(itemName.ToUpperInvariant()));
+                    player.Inventory.Remove(subPart);
+                }
             }
-
-            return false;
-        }
-
-        public string[] GetPartsFor(AbstractItem item)
-        {
-            if (item is PowerCube)
-            {
-                return new string[] { "Glass Cube", "Positron Emitter", "Antimatter Coil" };
-            }
-            else if (item is GlassCube)
-            {
-                return new string[] { "Glass Box", "Glass Lid" };
-            }
-            else if (item is PositronEmitter)
-            {
-                return new string[] { "Positronic Laser", "Focus Chamber" };
-            }
-            else if (item is AntimatterCoil)
-            {
-                return new string[] { "Coil Chasis", "Neutron Cell" };
-            }
-
-            return new string[0];
         }
 
         /// <summary>
@@ -50,25 +31,42 @@ namespace Prototype.Game
         /// <param name="player">The player whose inventory we're frisking</param>
         /// <param name="items">A list of item names to search for</param>
         /// <returns>true if the player had all of them (we remove them), false otherwise.</returns>
-        private bool CheckForAndRemove(Player player, params string[] items)
+        public bool CanAssemble(Type type, Player player)
         {
             var inventoryItems = player.Inventory.Select(i => i.Name.ToUpperInvariant());
+            var requiredItems = this.GetPartsFor(type);
 
-            foreach (var itemName in items)
+            foreach (var itemName in requiredItems)
             {
-                if (!inventoryItems.Contains(itemName.ToUpperInvariant())
+                if (!inventoryItems.Contains(itemName.ToUpperInvariant()))
                 {
                     return false;
                 }
             }
 
-            foreach (var itemName in items)
+            return true;
+        }
+
+        internal string[] GetPartsFor(Type type)
+        {
+            if (type == typeof(PowerCube))
             {
-                var item = player.Inventory.Single(i => i.Name.ToUpperInvariant().Contains(itemName.ToUpperInvariant()));
-                player.Inventory.Remove(item);
+                return new string[] { "Glass Cube", "Positron Emitter", "Antimatter Coil" };
+            }
+            else if (type == typeof(GlassCube))
+            {
+                return new string[] { "Glass Box", "Glass Lid" };
+            }
+            else if (type == typeof(PositronEmitter))
+            {
+                return new string[] { "Positronic Laser", "Focus Chamber" };
+            }
+            else if (type == typeof(AntimatterCoil))
+            {
+                return new string[] { "Coil Chasis", "Neutron Cell" };
             }
 
-            return true;
+            return new string[0];
         }
     }
 }

@@ -119,16 +119,18 @@ namespace Prototype.Game
             }
             else
             {
-                var buildable = this.player.GetBuildableItem();
-                if (buildable == null)
+                var buildableType = this.player.GetBuildableType(this.currentRoom.WorkBench);
+                if (buildableType == null)
                 {
                     SpeakAndPrint("You don't have enough parts to build anything significant yet.", "You don't have the parts.");
                 }
                 else
                 {
-                    this.currentRoom.WorkBench.Assemble(buildable, player);
-                    var parts = WorkBench.GetPartsFor(buildable);
-                    SpeakAndPrint($"You build the {buildable.Name} out of the {string.Join(", ", parts)}. ");
+                    this.currentRoom.WorkBench.Assemble(buildableType, player);
+                    var item = (AbstractItem)Activator.CreateInstance(buildableType);
+                    player.Inventory.Add(item);
+                    var parts = this.currentRoom.WorkBench.GetPartsFor(buildableType);
+                    SpeakAndPrint($"You build the {item.Name} out of the {string.Join(", ", parts)}. ");
                 }
             }
         }
