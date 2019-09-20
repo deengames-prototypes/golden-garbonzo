@@ -14,6 +14,7 @@ namespace Prototype.Game.Models
         public string Id { get; private set;  }
         public readonly List<Monster> Monsters = new List<Monster>();
         public bool IsSealed { get; set; }
+        public GemSocket Socket { get; private set; }
 
         internal StairsType Stairs = StairsType.NONE;
         internal bool IsLocked = false;
@@ -21,8 +22,6 @@ namespace Prototype.Game.Models
         private readonly int floorNum;
         private readonly List<Room> connectedTo = new List<Room>();
         private List<AbstractItem> items = new List<AbstractItem>();
-
-        private GemSocket socket = null;
 
         public Room(int floorNum, string id, int numMonsters)
         {
@@ -83,9 +82,22 @@ namespace Prototype.Game.Models
             }
 
             // Presence of an incomplete gem socket hides stairs
-            if ((this.Stairs != StairsType.NONE) && (this.socket == null || this.socket.IsSolved()))
+            if (this.Socket == null || this.Socket.IsSolved())
             {
-                builder.Append($". You see stairs leading {(this.Stairs == StairsType.NEXT_FLOOR ? "down" : "up")}.");
+                if (this.Stairs != StairsType.NONE)
+                {
+                    builder.Append($". You see stairs leading {(this.Stairs == StairsType.NEXT_FLOOR ? "down" : "up")}.");
+                }
+            }
+            else
+            {
+                // Socket present and unsolved
+                var socketsMessage = "";
+                if (Socket.GemsSocketed > 0)
+                {
+                    socketsMessage = $"{Socket.GemsSocketed} of them hold gems. ";
+                }
+                builder.Append($". You see a socket in the wall with {Socket.RequiredGems} slots in it. {socketsMessage} ");
             }
 
             if (this.items.Any())
@@ -98,7 +110,7 @@ namespace Prototype.Game.Models
 
         internal void CreateGemSocket()
         {
-            this.socket = new GemSocket(2);
+            this.Socket = new GemSocket(2);
         }
 
         internal bool IsConnectedTo(Room target)
