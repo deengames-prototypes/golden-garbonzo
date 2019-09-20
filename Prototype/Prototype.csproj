@@ -48,6 +48,12 @@
     <Compile Include="Game\Enums\StairsType.cs" />
     <Compile Include="Game\GoldenGarbonzo.cs" />
     <Compile Include="Game\Models\GemSocket.cs" />
+    <Compile Include="Game\Models\Items\Assemblable\Parts\NeutronBattery.cs" />
+    <Compile Include="Game\Models\Items\Assemblable\Parts\CoilChasis.cs" />
+    <Compile Include="Game\Models\Items\Assemblable\Parts\FocusChamber.cs" />
+    <Compile Include="Game\Models\Items\Assemblable\Parts\PositronicLaser.cs" />
+    <Compile Include="Game\Models\Items\Assemblable\Parts\GlassLid.cs" />
+    <Compile Include="Game\Models\Items\Assemblable\Parts\GlassBox.cs" />
     <Compile Include="Game\Models\Items\DoorKey.cs" />
     <Compile Include="Game\Models\Dungeon.cs" />
     <Compile Include="Game\Models\Items\AbstractItem.cs" />
