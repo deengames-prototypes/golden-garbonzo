@@ -66,6 +66,12 @@ namespace Prototype.Game.Models
             }
         }
 
+        internal void AddWorkBenchToRandomRoom()
+        {
+            var room = this.PickRandomRoom();
+            room.CreateWorkBench();
+        }
+
         /// <summary>
         /// Creates a gem socket in the final room, and hides the stairs.
         /// </summary>
@@ -100,6 +106,12 @@ namespace Prototype.Game.Models
         
         public void SealRandomRoom()
         {
+            var room = this.PickRandomRoom();
+            room.IsSealed = true;
+        }
+
+        private Room PickRandomRoom()
+        {
             var roomIndex = 0;
             
             // Don't seal the starting/final rooms (with stairs)
@@ -108,8 +120,7 @@ namespace Prototype.Game.Models
                 roomIndex = random.Next(this.Rooms.Count - 1);
             }
 
-            var sealedRoom = this.Rooms[roomIndex];
-            sealedRoom.IsSealed = true;
+            return this.Rooms[roomIndex];
         }
     }
 }

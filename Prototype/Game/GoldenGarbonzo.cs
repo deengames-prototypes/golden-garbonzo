@@ -92,6 +92,14 @@ namespace Prototype.Game
                 case "P":
                     this.ProcessPut(inputTokens);
                     break;
+                case "U":
+                case "USE":
+                case "B":
+                case "BUILD":
+                case "C":
+                case "CRAFT":
+                    this.UseWorkBench();
+                    break;
                 // TODO: use stairs: make sure there is no socket or it's solved
                 case "QUIT":
                 case "Q":
@@ -100,6 +108,28 @@ namespace Prototype.Game
                 default:
                     SpeakAndPrint($"Not sure how to {input}");
                     break;
+            }
+        }
+
+        private void UseWorkBench()
+        {
+            if (this.currentRoom.WorkBench == null)
+            {
+                SpeakAndPrint("There's no workbench here.");
+            }
+            else
+            {
+                var buildable = this.player.GetBuildableItem();
+                if (buildable == null)
+                {
+                    SpeakAndPrint("You don't have enough parts to build anything significant yet.", "You don't have the parts.");
+                }
+                else
+                {
+                    this.currentRoom.WorkBench.Assemble(buildable, player);
+                    var parts = WorkBench.GetPartsFor(buildable);
+                    SpeakAndPrint($"You build the {buildable.Name} out of the {string.Join(", ", parts)}. ");
+                }
             }
         }
 

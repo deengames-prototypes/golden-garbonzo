@@ -11,10 +11,11 @@ namespace Prototype.Game.Models
     {
         private static Random random = new Random();
 
-        public string Id { get; private set;  }
+        public string Id { get; private set; }
         public readonly List<Monster> Monsters = new List<Monster>();
         public bool IsSealed { get; set; }
         public GemSocket Socket { get; private set; }
+        public WorkBench WorkBench { get; private set; }
 
         internal StairsType Stairs = StairsType.NONE;
         internal bool IsLocked = false;
@@ -61,6 +62,11 @@ namespace Prototype.Game.Models
         internal void CreateGemSocket()
         {
             this.Socket = new GemSocket(2);
+        }
+
+        internal void CreateWorkBench()
+        {
+            this.WorkBench = new WorkBench();
         }
 
         internal bool IsConnectedTo(Room target)
@@ -130,6 +136,11 @@ namespace Prototype.Game.Models
                 builder.Append($". You see a socket in the wall with {Socket.RequiredGems} slots in it. {socketsMessage} ");
             }
 
+            if (this.WorkBench != null)
+            {
+                builder.Append("You see a workbench here. You can use it to build things.");
+            }
+
             if (this.items.Any())
             {
                 this.items.ForEach(i => builder.Append($" You see a {i.Name}. "));
@@ -189,6 +200,11 @@ namespace Prototype.Game.Models
                     socketsMessage = $"{Socket.GemsSocketed} of them hold gems. ";
                 }
                 builder.Append($". You see a socket in the wall with {Socket.RequiredGems} slots in it. {socketsMessage} ");
+            }
+
+            if (this.WorkBench != null)
+            {
+                builder.Append("You see a usable workbench here.");
             }
 
             if (this.items.Any())

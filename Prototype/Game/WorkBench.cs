@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Prototype.Game.Models;
+using Prototype.Game.Models.Items;
 using Prototype.Game.Models.Items.Assemblable;
 
 namespace Prototype.Game
@@ -14,28 +11,37 @@ namespace Prototype.Game
         /// Assembles an item out of constituent elements. Returns true if assembled, false if not.
         /// </summary>
         /// <param name="itemName">The thing to assemble.</param>
-        public bool Assemble(string itemName, Player player)
+        public bool Assemble(AbstractItem item, Player player)
         {
-            itemName = itemName.ToUpperInvariant();
-
-            if (itemName.Contains("POWER")) // power cube
+            if (this.CheckForAndRemove(player, this.GetPartsFor(item)))
             {
-                return this.CheckForAndRemove(player, "Glass Cube", "Positron Emitter", "Antimatter Coil");
-            }
-            else if (itemName.Contains("GLASS CUBE"))
-            {
-                return this.CheckForAndRemove(player, "Glass Box", "Glass Lid");
-            }
-            else if (itemName.Contains("POSITRON")) // positron emitter
-            {
-                return this.CheckForAndRemove(player, "Positronic Laser", "Focus Chamber");
-            }
-            else if (itemName.Contains("ANTIMATTER")) // antimatter coil
-            {
-                return this.CheckForAndRemove(player, "Coil Chasis", "Neutron Cell");
+                player.Inventory.Add(item);
+                return true;
             }
 
-            return false; // dunno how to assemble that
+            return false;
+        }
+
+        public string[] GetPartsFor(AbstractItem item)
+        {
+            if (item is PowerCube)
+            {
+                return new string[] { "Glass Cube", "Positron Emitter", "Antimatter Coil" };
+            }
+            else if (item is GlassCube)
+            {
+                return new string[] { "Glass Box", "Glass Lid" };
+            }
+            else if (item is PositronEmitter)
+            {
+                return new string[] { "Positronic Laser", "Focus Chamber" };
+            }
+            else if (item is AntimatterCoil)
+            {
+                return new string[] { "Coil Chasis", "Neutron Cell" };
+            }
+
+            return new string[0];
         }
 
         /// <summary>

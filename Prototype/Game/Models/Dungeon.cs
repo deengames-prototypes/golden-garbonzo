@@ -16,6 +16,8 @@ namespace Prototype.Game.Models
 
             // TODO: this should probably be more random. For now, it's a progression of difficulty, amirite?
             this.Floors.ForEach(f => f.SealRandomRoom());
+            this.Floors.ForEach(f => f.AddWorkBenchToRandomRoom());
+
             this.Floors[0].CreateKeyAndLockFinalRoom();
             this.Floors[0].CreateGemSocketAndGems();
         }
