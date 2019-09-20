@@ -1,5 +1,6 @@
 ﻿using Prototype.Game.Models.Items;
 using Prototype.Game.Models.Items.Assemblable;
+using Prototype.Game.Models.Items.Assemblable.Parts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace Prototype.Game.Models
             {
                 return typeof(PowerCube);
             }
-            else if (workBench.CanAssemble(typeof(GlassCube, this))
+            else if (workBench.CanAssemble(typeof(GlassCube), this))
             {
                 return typeof(GlassCube);
             }
