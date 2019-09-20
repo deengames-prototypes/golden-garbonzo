@@ -60,7 +60,7 @@ namespace Prototype.Game
             switch (command)
             {
                 case "HELP":
-                    SpeakAndPrint("Type 'quit' to quit, 'list' or 'l' to list the current room; type ATTACK to attack a target, or OPTIONS to change options");
+                    SpeakAndPrint("Type 'quit' to quit, 'list' or 'l' to list the current room; type ATTACK to attack a target, GO to go somewhere, GET to get something, or OPTIONS to change options");
                     break;
                 case "LIST":
                 case "L":
@@ -88,6 +88,10 @@ namespace Prototype.Game
                 case "O":
                     this.ProcessOptions(inputTokens);
                     break;
+                case "PUT":
+                case "P":
+                    this.ProcessPut(inputTokens);
+                    break;
                 // TODO: use stairs: make sure there is no socket or it's solved
                 case "QUIT":
                 case "Q":
@@ -96,6 +100,50 @@ namespace Prototype.Game
                 default:
                     SpeakAndPrint($"Not sure how to {input}");
                     break;
+            }
+        }
+
+        private void ProcessPut(string[] inputTokens)
+        {
+            if (inputTokens.Length < 2)
+            {
+                SpeakAndPrint("Type PUT then the name of the item in your inventory.");
+            }
+            else
+            {
+                var itemName = inputTokens[1].ToUpperInvariant();
+                var item = this.player.Inventory.FirstOrDefault(a => a.Name.ToUpperInvariant().Contains(itemName));
+                if (item == null)
+                {
+                    SpeakAndPrint($"You don't have any {itemName}.");
+                }
+                else
+                {
+                    if (this.currentRoom.Socket == null)
+                    {
+                        SpeakAndPrint($"There's nowhere to put the {item.Name}.");
+                    }
+                    else if (this.currentRoom.Socket.IsSolved())
+                    {
+                        SpeakAndPrint($"The socket is already full of gems.");
+                    }
+                    else if (!(item is Gemstone))
+                    {
+                        SpeakAndPrint("You can't put that.");
+                    }
+                    else
+                    {
+                        // Socket is non-null, unsolved, and the item is a gem.
+                        this.player.Inventory.Remove(item);
+                        this.currentRoom.Socket.Socket(item as Gemstone);
+                        SpeakAndPrint($"You place the {item.Name} in the gem socket. It clicks into place.");
+
+                        if (this.currentRoom.Socket.IsSolved())
+                        {
+                            SpeakAndPrint($"The stairs {(this.currentRoom.Stairs == Enums.StairsType.NEXT_FLOOR ? "down" : "up")} appear!");
+                        }
+                    }
+                }
             }
         }
 

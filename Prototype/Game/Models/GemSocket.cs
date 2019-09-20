@@ -32,7 +32,9 @@ namespace Prototype.Game.Models
 
         public bool IsSolved()
         {
-            return this.socketedGems.Count >= this.RequiredGems;
+            return this.GemsSocketed >= this.RequiredGems;
         }
+
+        public int GemsSocketed {  get { return this.socketedGems.Count; } }
     }
 }
