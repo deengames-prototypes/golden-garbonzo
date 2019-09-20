@@ -50,6 +50,36 @@ namespace Prototype.Game.Models
 
         public string GetContents()
         {
+            switch (Options.SpeechMode)
+            {
+                case SpeechMode.Detailed: return DetailedGetContents();
+                case SpeechMode.Summary: return ShortGetContents();
+                default: return DetailedGetContents();
+            }
+        }
+
+        internal void CreateGemSocket()
+        {
+            this.Socket = new GemSocket(2);
+        }
+
+        internal bool IsConnectedTo(Room target)
+        {
+            return this.connectedTo.Contains(target);
+        }
+
+        internal bool IsConnectedTo(string roomName)
+        {
+            return this.GetConnection(roomName) != null;
+        }
+
+        internal Room GetConnection(string roomName)
+        {
+            return this.connectedTo.FirstOrDefault(r => r.Id.ToUpperInvariant().Contains(roomName.ToUpperInvariant()));
+        }
+
+        private string DetailedGetContents()
+        {
             var builder = new StringBuilder();
             var aliveMonsters = this.Monsters.Where(m => m.CurrentHealth > 0);
             string numberOfMonsters = aliveMonsters.Any() ? $"the following {aliveMonsters.Count()}" : "no";
@@ -108,24 +138,65 @@ namespace Prototype.Game.Models
             return builder.ToString();
         }
 
-        internal void CreateGemSocket()
+        private string ShortGetContents()
         {
-            this.Socket = new GemSocket(2);
-        }
+            var builder = new StringBuilder();
+            var aliveMonsters = this.Monsters.Where(m => m.CurrentHealth > 0);
+            string numberOfMonsters = aliveMonsters.Any() ? $"the following {aliveMonsters.Count()}" : "no";
 
-        internal bool IsConnectedTo(Room target)
-        {
-            return this.connectedTo.Contains(target);
-        }
+            builder.Append($"{this.Id} room on {this.floorNum}F. ");
 
-        internal bool IsConnectedTo(string roomName)
-        {
-            return this.GetConnection(roomName) != null;
-        }
+            builder.Append($"Monsters: ");
+            foreach (var monsterGroup in aliveMonsters.GroupBy(m => m.Name))
+            {
+                builder.Append($"{monsterGroup.Count()} {monsterGroup.Key}s, ");
+            }
 
-        internal Room GetConnection(string roomName)
-        {
-            return this.connectedTo.FirstOrDefault(r => r.Id.ToUpperInvariant().Contains(roomName.ToUpperInvariant()));
+
+            if (!this.IsSealed)
+            {
+                builder.Append(" Connects to ");
+                foreach (var room in this.connectedTo)
+                {
+                    builder.Append($"{room.Id}, ");
+
+                    if (this.connectedTo.Count > 1 && room == this.connectedTo[this.connectedTo.Count - 2])
+                    {
+                        builder.Append(" and ");
+                    }
+                };
+                builder.Append(" rooms.");
+            }
+            else
+            {
+                builder.Append("The doors are sealed!");
+            }
+
+            // Presence of an incomplete gem socket hides stairs
+            if (this.Socket == null || this.Socket.IsSolved())
+            {
+                if (this.Stairs != StairsType.NONE)
+                {
+                    builder.Append($". You see stairs leading {(this.Stairs == StairsType.NEXT_FLOOR ? "down" : "up")}.");
+                }
+            }
+            else
+            {
+                // Socket present and unsolved
+                var socketsMessage = "";
+                if (Socket.GemsSocketed > 0)
+                {
+                    socketsMessage = $"{Socket.GemsSocketed} of them hold gems. ";
+                }
+                builder.Append($". You see a socket in the wall with {Socket.RequiredGems} slots in it. {socketsMessage} ");
+            }
+
+            if (this.items.Any())
+            {
+                this.items.ForEach(i => builder.Append($" You see a {i.Name}. "));
+            }
+
+            return builder.ToString();
         }
 
         private void GenerateMonsters(int numMonsters)

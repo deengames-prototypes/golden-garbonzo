@@ -40,11 +40,11 @@ namespace Prototype.Game
 
             while (input.Trim().ToUpper() != "QUIT" && input.ToUpper() != "Q")
             {
-                SpeakAndPrint("Your command? ");
+                SpeakAndPrint("Your command? ", "");
                 Console.Write("> ");
                 input = Console.ReadLine();
                 this.speaker.StopAndClearQueue();
-                SpeakAndPrint($"You typed: {input}");
+                SpeakAndPrint($"You typed: {input}", "");
                 this.ProcessInput(input);
             }
 
@@ -158,16 +158,27 @@ namespace Prototype.Game
                 var targetName = inputTokens[1];
                 if (!this.currentRoom.HasMonster(targetName))
                 {
-                    SpeakAndPrint($"There doesn't seem to be a {targetName} here to attack.");
+                    SpeakAndPrint($"There is no {targetName} here");
                 }
                 else
                 {
                     var target = this.currentRoom.GetMonster(targetName);
                     var battler = new Battler(this.player, target);
                     var results = battler.FightToTheDeath();
-                    var winnerMessage = results.Winner == player ? $"you vanquish your foe! You had {player.CurrentHealth} out of {player.TotalHealth} health." : $"you collapse to the ground in a heap! (The {target.Name} had {target.CurrentHealth} out of {target.TotalHealth} health.)";
+
+                    var winnerMessage = "";
+                    switch (Options.SpeechMode)
+                    {
+                        case SpeechMode.Detailed:
+                            winnerMessage = results.Winner == player ? $"you vanquish your foe! You had {player.CurrentHealth} out of {player.TotalHealth} health." : $"you collapse to the ground in a heap! (The {target.Name} has {target.CurrentHealth} out of {target.TotalHealth} health remaining.)";
+                            break;
+                        case SpeechMode.Summary:
+                            winnerMessage = results.Winner == player ? $"you win!" : $"You die! {target.Name} has {target.CurrentHealth} health left.";
+                            break;
+                    }                    
+
                     player.CurrentHealth = player.TotalHealth;
-                    SpeakAndPrint($"You attack a {target.Name}!");
+                    SpeakAndPrint($"You attack a {target.Name}!", "Battle begins!");
 
                     switch (Options.CombatType)
                     {
@@ -179,7 +190,7 @@ namespace Prototype.Game
                             break;
                     }
 
-                    SpeakAndPrint($"After {results.RoundMessages.Length} rounds, {winnerMessage}");
+                    SpeakAndPrint($"After {results.RoundMessages.Length} rounds, {winnerMessage}", winnerMessage);
                     if (results.Winner == player && target.Item != null)
                     {
                         var item = target.Item;
@@ -191,7 +202,7 @@ namespace Prototype.Game
                     if (this.currentRoom.IsSealed && !this.currentRoom.Monsters.Any(m => m.CurrentHealth > 0) && results.Winner == player)
                     {
                         this.currentRoom.IsSealed = false;
-                        SpeakAndPrint("The magic seals on all the doors dissipate.");
+                        SpeakAndPrint("The pressurized seals on all the doors dissipate.");
                     }
                 }
             }
@@ -207,14 +218,14 @@ namespace Prototype.Game
             {
                 if (this.currentRoom.IsSealed)
                 {
-                    SpeakAndPrint("You can't leave - all the doors are sealed shut!");
+                    SpeakAndPrint("You can't leave - all the doors are sealed shut!", "The doors are sealed.");
                 }
                 else
                 {
                     var targetName = inputTokens[1];
                     if (!this.currentRoom.IsConnectedTo(targetName))
                     {
-                        SpeakAndPrint($"There doesn't seem to be a way to go to {targetName} from here.");
+                        SpeakAndPrint($"There doesn't seem to be a way to go to {targetName} from here.", $"Can't go to {targetName} from here.");
                     }
                     else
                     {
@@ -269,22 +280,30 @@ namespace Prototype.Game
         {
             if (inputTokens.Length != 2)
             {
-                this.SpeakAndPrint($"Type options combat to change the combat style. It's currently set to {Options.CombatType}.");
+                this.SpeakAndPrint($"Type options and then the name of the option to change it. Current options: ");
+                this.SpeakAndPrint($"Combat is {Options.CombatType}, ");
+                this.SpeakAndPrint($"Speech is {Options.SpeechMode}");
             }
             else
             {
                 var targetName = inputTokens[1].ToUpperInvariant();
-                if (targetName != "COMBAT")
+                if (targetName != "COMBAT" && targetName != "SPEECH")
                 {
-                    SpeakAndPrint($"There doesn't seem to be a {targetName} option. Valid options are: COMBAT");
+                    SpeakAndPrint($"There doesn't seem to be a {targetName} option. Valid options are: COMBAT, SPEECH");
                 }
                 else
                 {
                     switch (targetName)
                     {
                         case "COMBAT":
-                            Options.CombatType = Options.CombatType == CombatType.RoundByRound ? CombatType.Summary : CombatType.RoundByRound;
-                            this.SpeakAndPrint($"Combat changed to {Options.CombatType.ToString()}");
+                            var newMode = Options.CombatType == CombatType.RoundByRound ? CombatType.Summary : CombatType.RoundByRound;
+                            this.SpeakAndPrint($"Combat changed from {Options.CombatType.ToString()} to {newMode}");
+                            Options.CombatType = newMode;
+                            break;
+                        case "SPEECH":
+                            var newSpeech = Options.SpeechMode == SpeechMode.Detailed ? SpeechMode.Summary : SpeechMode.Detailed;
+                            this.SpeakAndPrint($"Speech changed from {Options.SpeechMode.ToString()} to {newSpeech}");
+                            Options.SpeechMode = newSpeech;
                             break;
                     }
                 }
@@ -308,8 +327,9 @@ namespace Prototype.Game
             }
         }
 
-        private void SpeakAndPrint(string text)
+        private void SpeakAndPrint(string longFormText, string shortFormText = null)
         {
+            var text = shortFormText == null ? longFormText : shortFormText;
             Console.WriteLine(text);
             this.speaker.Speak(text);
         }
