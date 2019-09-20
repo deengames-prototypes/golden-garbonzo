@@ -2,6 +2,6 @@
 {
     class GlassCube : AbstractItem
     {
-        public override string Description => "";
+        public override string Description => "A cube made of thick, shatter-proof glass, with a sliding lid.";
     }
 }

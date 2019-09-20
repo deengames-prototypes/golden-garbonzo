@@ -8,6 +8,6 @@ namespace Prototype.Game.Models.Items.Assemblable.Parts
 {
     class CoilChasis : AbstractItem
     {
-        public override string Description => "";
+        public override string Description => "A fine mesh supermetal made for housing a power coil.";
     }
 }

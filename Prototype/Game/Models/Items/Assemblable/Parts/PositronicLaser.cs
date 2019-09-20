@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Prototype.Game.Models.Items.Assemblable.Parts
+﻿namespace Prototype.Game.Models.Items.Assemblable.Parts
 {
     class PositronicLaser : AbstractItem
     {
-        public override string Description => "";
+        public override string Description => "A tiny laser that can emit bursts of positronic energy.";
     }
 }

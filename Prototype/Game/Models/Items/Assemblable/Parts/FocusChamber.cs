@@ -8,6 +8,6 @@ namespace Prototype.Game.Models.Items.Assemblable.Parts
 {
     class FocusChamber : AbstractItem
     {
-        public override string Description => "";
+        public override string Description => "A spherical lens capable of focusing laser energy.";
     }
 }

@@ -2,6 +2,6 @@
 {
     class AntimatterCoil : AbstractItem
     {
-        public override string Description => "";
+        public override string Description => "A power coil that generates immense antimatter energy.";
     }
 }

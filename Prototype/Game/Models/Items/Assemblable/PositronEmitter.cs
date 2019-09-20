@@ -2,6 +2,6 @@
 {
     class PositronEmitter : AbstractItem
     {
-        public override string Description => "";
+        public override string Description => "A small mechanical device that emits tons of positrons.";
     }
 }
