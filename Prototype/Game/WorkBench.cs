@@ -34,7 +34,7 @@ namespace Prototype.Game
         public bool CanAssemble(Type type, Player player)
         {
             var inventoryItems = player.Inventory.Select(i => i.Name.ToUpperInvariant());
-            var requiredItems = this.GetPartsFor(type);
+            var requiredItems = this.GetPartsFor(type).Select(s => s.Replace(" ", "").ToUpperInvariant()); // remove spaces for parity with type names
 
             foreach (var itemName in requiredItems)
             {
@@ -49,24 +49,26 @@ namespace Prototype.Game
 
         internal string[] GetPartsFor(Type type)
         {
+            string[] toReturn = new string[0];
+
             if (type == typeof(PowerCube))
             {
-                return new string[] { "Glass Cube", "Positron Emitter", "Antimatter Coil" };
+                toReturn = new string[] { "Glass Cube", "Positron Emitter", "Antimatter Coil" };
             }
             else if (type == typeof(GlassCube))
             {
-                return new string[] { "Glass Box", "Glass Lid" };
+                toReturn = new string[] { "Glass Box", "Glass Lid" };
             }
             else if (type == typeof(PositronEmitter))
             {
-                return new string[] { "Positronic Laser", "Focus Chamber" };
+                toReturn = new string[] { "Positronic Laser", "Focus Chamber" };
             }
             else if (type == typeof(AntimatterCoil))
             {
-                return new string[] { "Coil Chasis", "Neutron Cell" };
+                toReturn = new string[] { "Coil Chasis", "Neutron Cell" };
             }
 
-            return new string[0];
+            return toReturn.Select(s => s.Replace(" ", "").ToUpperInvariant()).ToArray(); // parity with type-as-name
         }
     }
 }

@@ -48,7 +48,11 @@
     <Compile Include="Game\Enums\StairsType.cs" />
     <Compile Include="Game\GoldenGarbonzo.cs" />
     <Compile Include="Game\Models\GemSocket.cs" />
-    <Compile Include="Game\Models\Items\Assemblable\Parts\NeutronBattery.cs" />
+    <Compile Include="Game\Models\Items\Assemblable\PowerCube.cs" />
+    <Compile Include="Game\Models\Items\Assemblable\AntimatterCoil.cs" />
+    <Compile Include="Game\Models\Items\Assemblable\PositronEmitter.cs" />
+    <Compile Include="Game\Models\Items\Assemblable\GlassCube.cs" />
+    <Compile Include="Game\Models\Items\Assemblable\Parts\NeutronCell.cs" />
     <Compile Include="Game\Models\Items\Assemblable\Parts\CoilChasis.cs" />
     <Compile Include="Game\Models\Items\Assemblable\Parts\FocusChamber.cs" />
     <Compile Include="Game\Models\Items\Assemblable\Parts\PositronicLaser.cs" />
@@ -64,6 +68,7 @@
     <Compile Include="Game\Models\Room.cs" />
     <Compile Include="Game\GlobalConfig.cs" />
     <Compile Include="Game\Options.cs" />
+    <Compile Include="Game\WorkBench.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextToSpeech\ISpeaker.cs" />
