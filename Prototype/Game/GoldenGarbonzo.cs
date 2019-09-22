@@ -1,6 +1,7 @@
 ﻿using Prototype.Game.Battle;
 using Prototype.Game.Models;
 using Prototype.Game.Models.Items;
+using Prototype.Game.Models.Items.Assemblable;
 using Prototype.TextToSpeech;
 using System;
 using System.Collections.Generic;
@@ -185,7 +186,30 @@ namespace Prototype.Game
                 }
                 else
                 {
-                    if (this.currentRoom.Socket == null)
+                    if (this.currentRoom is MachineRoom)
+                    {
+                        var machineRoom = currentRoom as MachineRoom;
+
+                        if (item is PowerCube)
+                        {
+                            machineRoom.InsertedPowerCube = true;
+                            this.player.Inventory.Remove(item);
+                            this.SpeakAndPrint("You place the power cube in the alcove. The machine clicks and whirs to life.");
+                            if (Options.SpeechMode == SpeechMode.Detailed)
+                            {
+                                this.SpeakAndPrint("A breeze from the machine parts blows over you.");
+                            }
+                        }
+                        else if (machineRoom.InsertedPowerCube == true)
+                        {
+                            this.SpeakAndPrint("You already put the power cube in the machine.");
+                        }
+                        else
+                        {
+                            this.SpeakAndPrint($"You twist and push the {item.Name} but it doesn't fit in the alcove.");
+                        }
+                    }
+                    else if (this.currentRoom.Socket == null)
                     {
                         SpeakAndPrint($"There's nowhere to put the {item.Name}.");
                     }
