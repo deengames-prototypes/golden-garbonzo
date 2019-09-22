@@ -112,8 +112,7 @@ namespace Prototype.Game.Models
 
         internal void CreateMachineRoom()
         {
-            // var room = this.PickRandomRoom();
-            var room = this.Rooms[0];
+            var room = this.PickRandomRoom();
             room.ConnectTo(new MachineRoom(room));
         }
 
