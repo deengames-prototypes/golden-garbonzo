@@ -1,4 +1,4 @@
-﻿using Prototype.Game.Battle;
+using Prototype.Game.Battle;
 using Prototype.Game.Models;
 using Prototype.Game.Models.Items;
 using Prototype.Game.Models.Items.Assemblable;
@@ -19,7 +19,7 @@ namespace Prototype.Game
 
         public void Run()
         {
-            this.speaker = new MicrosoftSpeaker();
+            this.speaker = new DummyoSpeaker();
             this.currentRoom = dungeon.Floors[currentFloor].Rooms[0];
 
             SpeakAndPrint($"Welcome to the dungeon! {this.currentRoom.GetContents()}");

@@ -1,7 +1,4 @@
-﻿using Prototype.Game;
-using System;
-using System.Speech.AudioFormat;
-using System.Speech.Synthesis;
+using Prototype.Game;
 
 namespace TextToSpeech
 {
