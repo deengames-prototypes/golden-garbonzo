@@ -84,7 +84,7 @@ namespace Prototype.Game.Models
             return this.connectedTo.FirstOrDefault(r => r.Id.ToUpperInvariant().Contains(roomName.ToUpperInvariant()));
         }
 
-        private string DetailedGetContents()
+        virtual protected string DetailedGetContents()
         {
             var builder = new StringBuilder();
             var aliveMonsters = this.Monsters.Where(m => m.CurrentHealth > 0);
@@ -149,7 +149,7 @@ namespace Prototype.Game.Models
             return builder.ToString();
         }
 
-        private string ShortGetContents()
+        virtual protected string ShortGetContents()
         {
             var builder = new StringBuilder();
             var aliveMonsters = this.Monsters.Where(m => m.CurrentHealth > 0);

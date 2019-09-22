@@ -60,7 +60,25 @@ namespace Prototype.Game
             switch (command)
             {
                 case "HELP":
-                    SpeakAndPrint("Type 'quit' to quit, 'list' or 'l' to list the current room; type ATTACK to attack a target, GO to go somewhere, GET to get something, or OPTIONS to change options");
+                    if (this.currentRoom is MachineRoom)
+                    {
+                        SpeakAndPrint(MachineRoom.HelpText);
+                    }
+                    else
+                    {
+                        SpeakAndPrint("Type 'quit' to quit, 'list' or 'l' to list the current room; type ATTACK to attack a target, GO to go somewhere, GET to get something, or OPTIONS to change options");
+                    }
+                    break;
+                // TODO: need a command to approach the machine
+                case "LEAVE":
+                    if (currentRoom is MachineRoom)
+                    {
+                        currentRoom = (currentRoom as MachineRoom).ContainingRoom;
+                    }
+                    else
+                    {
+                        SpeakAndPrint("Can't leave.");
+                    }
                     break;
                 case "LIST":
                 case "L":

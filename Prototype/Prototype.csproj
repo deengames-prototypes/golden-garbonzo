@@ -63,6 +63,7 @@
     <Compile Include="Game\Models\Items\AbstractItem.cs" />
     <Compile Include="Game\Models\Floor.cs" />
     <Compile Include="Game\Models\Items\Gemstone.cs" />
+    <Compile Include="Game\Models\MachineRoom.cs" />
     <Compile Include="Game\Models\Monster.cs" />
     <Compile Include="Game\Models\Player.cs" />
     <Compile Include="Game\Models\Room.cs" />
