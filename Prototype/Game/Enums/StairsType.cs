@@ -5,5 +5,6 @@
         NONE,
         NEXT_FLOOR,
         PREVIOUS_FLOOR,
+        ESCAPE,
     }
 }

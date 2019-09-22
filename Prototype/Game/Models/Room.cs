@@ -89,6 +89,21 @@ namespace Prototype.Game.Models
             return this.connectedTo.SingleOrDefault(r => r is MachineRoom) != null;
         }
 
+        internal string StairsString()
+        {
+            switch (this.Stairs)
+            {
+                case StairsType.PREVIOUS_FLOOR:
+                    return "down";
+                case StairsType.NEXT_FLOOR:
+                    return "up";
+                case StairsType.ESCAPE:
+                    return "out of here";
+                default:
+                    throw new ArgumentException(this.Stairs.ToString());
+            }
+        }
+
         virtual protected string DetailedGetContents()
         {
             var builder = new StringBuilder();
@@ -127,7 +142,7 @@ namespace Prototype.Game.Models
             {
                 if (this.Stairs != StairsType.NONE)
                 {
-                    builder.Append($". You see stairs leading {(this.Stairs == StairsType.NEXT_FLOOR ? "down" : "up")}.");
+                    builder.Append($". You see stairs leading {this.StairsString()}.");
                 }
             }
             else
@@ -193,7 +208,7 @@ namespace Prototype.Game.Models
             {
                 if (this.Stairs != StairsType.NONE)
                 {
-                    builder.Append($". You see stairs leading {(this.Stairs == StairsType.NEXT_FLOOR ? "down" : "up")}.");
+                    builder.Append($". You see stairs leading {this.StairsString()}.");
                 }
             }
             else

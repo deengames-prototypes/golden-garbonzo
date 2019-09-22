@@ -97,12 +97,12 @@ namespace Prototype.TextToSpeech
 
         public void FinishSpeaking()
         {
-            this.IsActive = false;
-
-            while (this.lastSpoken != null && !this.lastSpoken.IsCompleted && this.queueToSpeak.Count > 0)
+            while (this.queueToSpeak.Count > 0 || (this.lastSpoken != null && !this.lastSpoken.IsCompleted))
             {
                 System.Threading.Thread.Sleep(100);
             }
+
+            this.IsActive = false;
 
             queueThread.Join();
         }

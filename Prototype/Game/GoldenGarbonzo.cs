@@ -28,9 +28,6 @@ namespace Prototype.Game
             this.MainProcessingLoop();
 
             this.speaker.FinishSpeaking();
-
-            this.SpeakAndPrint("Bye!");
-            System.Threading.Thread.Sleep(1250);
         }
 
         private void MainProcessingLoop()
@@ -170,6 +167,18 @@ namespace Prototype.Game
                 this.currentRoom = this.dungeon.Floors[currentFloor].Rooms[0];
                 this.SpeakAndPrint($"You step on the stair teleporter and materialize on the previous floor. {this.currentRoom.GetContents()}");
             }
+            else if (this.currentRoom.Stairs == Enums.StairsType.ESCAPE)
+            {
+                this.SpeakAndPrint(@"You pounce on the teleporter pad and jam the console button. The dungeon disappears in a wash of cold air and white light.
+                    You regain your senses in a stadium, thousands of cheering fans around you. 'Congratulations to our challenger!' a man shots, 'the first to conquer the dungeon and emerge victorious in over 100 years!'
+                    Memories flood back of the competition - the game, the entry, the prizes. You can look forward to a luxurious life from now on.
+                    Congratulations on completing the game! We hope you enjoyed playing it as much as we enjoyed making it. 
+                    Please contact NightBlade with your feedback so we can improve it. We look forward to hearing from you!
+                    Bye!");
+
+                this.speaker.FinishSpeaking();
+                Environment.Exit(0);
+            }
             else
             {
                 SpeakAndPrint("There are no stairs here.");
@@ -299,7 +308,7 @@ namespace Prototype.Game
 
                         if (this.currentRoom.Socket.IsSolved())
                         {
-                            SpeakAndPrint($"The stairs {(this.currentRoom.Stairs == Enums.StairsType.NEXT_FLOOR ? "down" : "up")} appear!");
+                            SpeakAndPrint($"The stairs leading {this.currentRoom.StairsString()} appear!");
                         }
                     }
                 }
