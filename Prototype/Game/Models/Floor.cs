@@ -66,9 +66,21 @@ namespace Prototype.Game.Models
             }
         }
 
+        internal void SpawnItems(params AbstractItem[] items)
+        {
+            var allMonsters = new List<Monster>();
+            this.Rooms.Where(r => !r.IsLocked).ToList().ForEach(r => allMonsters.AddRange(r.Monsters));
+
+            var itemHolders = allMonsters.OrderBy(a => random.Next()).Take(items.Length).ToList();            
+            for (var i = 0; i < items.Length; i++)
+            {
+                itemHolders[i].Item = items[i];
+            }
+        }
+
         internal void AddWorkBenchToRandomRoom()
         {
-            var room = this.PickRandomRoom();
+            var room = this.GetRandomRoom();
             room.CreateWorkBench();
         }
 
@@ -106,17 +118,17 @@ namespace Prototype.Game.Models
         
         internal void SealRandomRoom()
         {
-            var room = this.PickRandomRoom();
+            var room = this.GetRandomRoom();
             room.IsSealed = true;
         }
 
         internal void CreateMachineRoom()
         {
-            var room = this.PickRandomRoom();
+            var room = this.GetRandomRoom();
             room.ConnectTo(new MachineRoom(room));
         }
 
-        private Room PickRandomRoom()
+        internal Room GetRandomRoom()
         {
             var roomIndex = 0;
             

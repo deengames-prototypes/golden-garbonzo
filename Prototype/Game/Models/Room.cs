@@ -192,10 +192,19 @@ namespace Prototype.Game.Models
             if (!this.IsSealed)
             {
                 builder.Append(" Connects to ");
-                foreach (var room in this.connectedTo.Where(r => !(r is MachineRoom)))
+                var rooms = this.connectedTo.Where(r => !(r is MachineRoom));
+
+                if (rooms.Any())
                 {
-                    builder.Append($"{room.Id}, ");
-                };
+                    foreach (var room in rooms)
+                    {
+                        builder.Append($"{room.Id}, ");
+                    };
+                }
+                else
+                {
+                    builder.Append("no other");
+                }
                 builder.Append(" rooms.");
             }
             else
@@ -240,6 +249,28 @@ namespace Prototype.Game.Models
             return builder.ToString();
         }
 
+        internal void AddItem(AbstractItem item)
+        {
+            this.items.Add(item);
+        }
+
+        internal void RemoveItem(AbstractItem item)
+        {
+            this.items.Remove(item);
+        }
+
+        internal AbstractItem GetItem(string itemName)
+        {
+            var item = this.items.FirstOrDefault(i => i.Name.ToUpperInvariant().Contains(itemName.ToUpperInvariant()));
+            return item;
+        }
+
+        internal void AddToRandomMonster(AbstractItem item)
+        {
+            var monster = this.Monsters[random.Next(this.Monsters.Count)];
+            monster.Item = item;
+        }
+
         private void GenerateMonsters(int numMonsters)
         {
             var totalMonsterProbability = GlobalConfig.MONSTER_PROBABILITY.Values.Sum();
@@ -272,22 +303,6 @@ namespace Prototype.Game.Models
                     }
                 }
             }
-        }
-
-        internal void AddItem(AbstractItem item)
-        {
-            this.items.Add(item);
-        }
-
-        internal void RemoveItem(AbstractItem item)
-        {
-            this.items.Remove(item);
-        }
-
-        internal AbstractItem GetItem(string itemName)
-        {
-            var item = this.items.FirstOrDefault(i => i.Name.ToUpperInvariant().Contains(itemName.ToUpperInvariant()));
-            return item;
         }
     }
 }

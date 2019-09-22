@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using Prototype.Game.Models.Items;
+using Prototype.Game.Models.Items.Assemblable.Parts;
+using System;
+using System.Collections.Generic;
 
 namespace Prototype.Game.Models
 {
     class Dungeon
     {
         internal List<Floor> Floors = new List<Floor>();
+        private Random random = new Random();
 
         public Dungeon()
         {
@@ -14,15 +18,33 @@ namespace Prototype.Game.Models
                 this.Floors.Add(new Floor(i));
             }
 
-            // TODO: this should probably be more random. For now, it's a progression of difficulty, amirite?
+            // Stuff for every floor
             this.Floors.ForEach(f => f.SealRandomRoom());
             this.Floors.ForEach(f => f.AddWorkBenchToRandomRoom());
+            
+            var b1 = this.Floors[0];
+            var b2 = this.Floors[1];
+            var b3 = this.Floors[2];
 
-            this.Floors[0].CreateKeyAndLockFinalRoom();
-            this.Floors[0].CreateGemSocketAndGems();
+            // Demo requirements. Not as complex as I hoped.
+            // 1) Lock a room on 1F with a gem inside
+            var gemRoom = b1.GetRandomRoom();
+            gemRoom.AddToRandomMonster(new Gemstone());
+            gemRoom.IsLocked = true;
 
-            // For testing. For production, put this on 3F.
-            //this.Floors[0].CreateMachineRoom();
+            // 2) Key on 2F
+            b2.GetRandomRoom().AddToRandomMonster(new DoorKey());
+
+            // 3) Machine puzzle on 3F
+            b3.CreateMachineRoom();
+
+            // 4) Socket on 3F
+            b3.GetRandomRoom().CreateGemSocket();
+
+            // 5) Add constituent elements per floor
+            b1.SpawnItems(new GlassBox(), new GlassLid());
+            b2.SpawnItems(new PositronicLaser(), new FocusChamber());
+            b3.SpawnItems(new CoilChasis(), new NeutronCell());
         }
     }
 }
