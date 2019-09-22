@@ -19,7 +19,7 @@ namespace Prototype.Game
 
         public void Run()
         {
-            this.speaker = new DummyoSpeaker();
+            this.speaker = new DummySpeaker();
             this.currentRoom = dungeon.Floors[currentFloor].Rooms[0];
 
             SpeakAndPrint($"Welcome to the dungeon! {this.currentRoom.GetContents()}");
