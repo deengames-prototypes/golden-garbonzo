@@ -14,28 +14,17 @@ namespace Prototype.Game.Models
         private PowerCube powerCube = null;
         private Random random = new Random();
         private bool[] switches = new bool[3];
-        private bool[] expectedSwitches = new bool[3];
+        private bool[] expectedSwitches = new bool[3] { true, true, true};
 
         public MachineRoom(Room containingRoom) : base(0, "MACHINE", 0)
         {
             this.ContainingRoom = containingRoom;
 
-            // Expected configuration is NOT RANDOM. 25% chance it's true/true/true, 25% chance for each node to be off.
+            // Expected configuration is NOT RANDOM. One node is off.
             // Having 2+ off nodes is too easy to solve.
-            var whichConfiguration = random.Next(100);
-
-            if (whichConfiguration >= 75)
-            {
-                for (var i = 0; i < expectedSwitches.Length; i++)
-                {
-                    expectedSwitches[i] = true;
-                }
-            }
-            else
-            {
-                int whichOneIsOff = (int)Math.Floor(whichConfiguration / 25d);
-                expectedSwitches[whichOneIsOff] = false;
-            }
+            var whichConfiguration = random.Next(75);
+            int whichOneIsOff = (int)Math.Floor(whichConfiguration / 25d);
+            expectedSwitches[whichOneIsOff] = false;
         }
 
         internal bool IsSolved()
@@ -51,24 +40,12 @@ namespace Prototype.Game.Models
             return true;
         }
 
-        protected override string DetailedGetContents()
+        internal void Switch(int index)
         {
-            var builder = new StringBuilder();
-            var cubeText = powerCube == null ? "" : "The power cube thrums from within.";
-            builder.Append($"You are standing at a huge, room-sized machine. You notice a cube-shaped alcove near you. {cubeText}");
-            builder.Append($"You see three switches above a clear energy chamber with three energy nodes. The energy {this.GetEnergyPoint()}. The switches are {getSwitches()}. ");
-            return builder.ToString();
+            this.switches[index] = !this.switches[index];
         }
 
-        protected override string ShortGetContents()
-        {
-            var builder = new StringBuilder();
-            builder.Append($"You are standing at a huge machine. The machine is {(powerCube == null ? "off" : "on")}. ");
-            builder.Append($"Energy in the 3-node glass energy chamber {this.GetEnergyPoint()}. You see three switches: {getSwitches()}. ");
-            return builder.ToString();
-        }
-
-        private string GetEnergyPoint()
+        internal string GetEnergyPoint()
         {
             if (this.switches[0] != this.expectedSwitches[0])
             {
@@ -86,6 +63,23 @@ namespace Prototype.Game.Models
             {
                 return "floods the chamber and disappears into the depths of the machine";
             }
+        }
+
+        protected override string DetailedGetContents()
+        {
+            var builder = new StringBuilder();
+            var cubeText = powerCube == null ? "" : "The power cube thrums from within.";
+            builder.Append($"You are standing at a huge, room-sized machine. You notice a cube-shaped alcove near you. {cubeText}");
+            builder.Append($"You see three switches above a clear energy chamber with three energy nodes. The energy {this.GetEnergyPoint()}. The switches are {getSwitches()}. ");
+            return builder.ToString();
+        }
+
+        protected override string ShortGetContents()
+        {
+            var builder = new StringBuilder();
+            builder.Append($"You are standing at a huge machine. The machine is {(powerCube == null ? "off" : "on")}. ");
+            builder.Append($"Energy in the 3-node glass energy chamber {this.GetEnergyPoint()}. You see three switches: {getSwitches()}. ");
+            return builder.ToString();
         }
 
         private string getSwitches()

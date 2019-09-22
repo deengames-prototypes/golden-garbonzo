@@ -135,7 +135,18 @@ namespace Prototype.Game
                         this.UseWorkBench();
                     }
                     break;
-                // TODO: use stairs: make sure there is no socket or it's solved
+                case "STAIRS":
+                    break;
+                case "SWITCH":
+                    if (this.currentRoom is MachineRoom)
+                    {
+                        this.ProcessSwitch(inputTokens);
+                    }
+                    else
+                    {
+                        SpeakAndPrint($"Not sure how to switch.");
+                    }
+                    break;
                 case "QUIT":
                 case "Q":
                 case "EXIT":
@@ -143,6 +154,37 @@ namespace Prototype.Game
                 default:
                     SpeakAndPrint($"Not sure how to {input}");
                     break;
+            }
+        }
+
+        private void ProcessSwitch(string[] inputTokens)
+        {
+            var machineRoom = this.currentRoom as MachineRoom;
+            if (machineRoom != null)
+            {
+                int switchNumber = -1;
+                if (inputTokens.Length >= 2 && int.TryParse(inputTokens[1], out switchNumber) && switchNumber >= 1 && switchNumber <= 3)
+                {
+                    machineRoom.Switch(switchNumber - 1);
+                    var nth = "";
+                    switch (switchNumber)
+                    {
+                        case 1: nth = "first";
+                            break;
+                        case 2: nth = "second";
+                            break;
+                        case 3: nth = "third";
+                            break;
+                        default:
+                            nth = "";
+                            break;
+                    }
+                    this.SpeakAndPrint($"You press the keypad for the {nth} switch. The energy {machineRoom.GetEnergyPoint()}.");
+                }
+                else
+                {
+                    this.SpeakAndPrint("Type switch, and a switch number from 1 to 3.");
+                }
             }
         }
 
@@ -186,6 +228,7 @@ namespace Prototype.Game
                 }
                 else
                 {
+                    // TODO: this was a mistake, the machine room should have its own separate processing logic. Not here.
                     if (this.currentRoom is MachineRoom)
                     {
                         var machineRoom = currentRoom as MachineRoom;
