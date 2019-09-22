@@ -179,7 +179,14 @@ namespace Prototype.Game
                             nth = "";
                             break;
                     }
+
                     this.SpeakAndPrint($"You press the keypad for the {nth} switch. The energy {machineRoom.GetEnergyPoint()}.");
+                    if (machineRoom.IsSolved() && machineRoom.Gem != null)
+                    {
+                        this.player.Inventory.Add(machineRoom.Gem);
+                        this.SpeakAndPrint($"The machine whirs at a higher and higher pitch. {machineRoom.Gem.Description} materializes in front of you. Hesitantly, you touch it, then pocket it.");
+                        machineRoom.Gem = null;
+                    }
                 }
                 else
                 {
