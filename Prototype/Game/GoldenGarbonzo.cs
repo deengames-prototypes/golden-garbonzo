@@ -14,15 +14,13 @@ namespace Prototype.Game
         private ISpeaker speaker;
         private Room currentRoom;
         private Player player = new Player();
+        private Dungeon dungeon = new Dungeon();
+        private int currentFloor = 0;
 
         public void Run()
         {
-            this.speaker = new MicrosoftSpeaker();            
-
-            var dungeon = new Dungeon();
-            var floors = dungeon.Floors;
-            
-            this.currentRoom = floors[0].Rooms[0];
+            this.speaker = new MicrosoftSpeaker();
+            this.currentRoom = dungeon.Floors[currentFloor].Rooms[0];
 
             SpeakAndPrint($"Welcome to the dungeon! {this.currentRoom.GetContents()}");
             SpeakAndPrint("Type something and press enter. Type 'help' for help, or 'quit' to quit.");
@@ -136,6 +134,7 @@ namespace Prototype.Game
                     }
                     break;
                 case "STAIRS":
+                    this.UseStairsIfPresent();
                     break;
                 case "SWITCH":
                     if (this.currentRoom is MachineRoom)
@@ -154,6 +153,26 @@ namespace Prototype.Game
                 default:
                     SpeakAndPrint($"Not sure how to {input}");
                     break;
+            }
+        }
+
+        private void UseStairsIfPresent()
+        {
+            if (this.currentRoom.Stairs == Enums.StairsType.NEXT_FLOOR)
+            {
+                this.currentFloor++;
+                this.currentRoom = this.dungeon.Floors[currentFloor].Rooms[0];
+                this.SpeakAndPrint($"You step on the stair teleporter and materialize on the next floor. {this.currentRoom.GetContents()}");
+            }
+            else if (this.currentRoom.Stairs == Enums.StairsType.PREVIOUS_FLOOR)
+            {
+                this.currentFloor--;
+                this.currentRoom = this.dungeon.Floors[currentFloor].Rooms[0];
+                this.SpeakAndPrint($"You step on the stair teleporter and materialize on the previous floor. {this.currentRoom.GetContents()}");
+            }
+            else
+            {
+                SpeakAndPrint("There are no stairs here.");
             }
         }
 
