@@ -7,13 +7,13 @@ namespace Prototype.Game.Models
     class MachineRoom : Room
     {
         public Room ContainingRoom { get; private set;  }
-        internal const string HelpText = "Type 'put' to put an item in the alcove. Type 'switch' and then a number to flip a switch. Type 'leave' to leave.";
+        internal const string HelpText = "You stand in front of a huge machine. Type 'put' to put an item in the alcove. Type 'switch' and then a number to flip a switch. Type 'leave' to leave.";
         private PowerCube powerCube = null;
         private Random random = new Random();
         private bool[] switches = new bool[3];
         private bool[] expectedSwitches = new bool[3];
 
-        public MachineRoom(Room containingRoom, int floorNum) : base(floorNum, "", 0)
+        public MachineRoom(Room containingRoom) : base(0, "MACHINE", 0)
         {
             this.ContainingRoom = containingRoom;
 

@@ -91,7 +91,7 @@ namespace Prototype.Game.Models
             }
         }
 
-        public void CreateKeyAndLockFinalRoom()
+        internal void CreateKeyAndLockFinalRoom()
         {
             var roomToLock = this.Rooms.Last();
             roomToLock.IsLocked = true;
@@ -104,10 +104,17 @@ namespace Prototype.Game.Models
             monster.Item = new DoorKey();
         }
         
-        public void SealRandomRoom()
+        internal void SealRandomRoom()
         {
             var room = this.PickRandomRoom();
             room.IsSealed = true;
+        }
+
+        internal void CreateMachineRoom()
+        {
+            // var room = this.PickRandomRoom();
+            var room = this.Rooms[0];
+            room.ConnectTo(new MachineRoom(room));
         }
 
         private Room PickRandomRoom()

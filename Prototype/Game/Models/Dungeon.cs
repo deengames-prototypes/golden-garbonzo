@@ -20,6 +20,9 @@ namespace Prototype.Game.Models
 
             this.Floors[0].CreateKeyAndLockFinalRoom();
             this.Floors[0].CreateGemSocketAndGems();
+
+            // For testing. For production, put this on 3F.
+            this.Floors[0].CreateMachineRoom();
         }
     }
 }

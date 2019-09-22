@@ -74,6 +74,8 @@ namespace Prototype.Game
                     if (currentRoom is MachineRoom)
                     {
                         currentRoom = (currentRoom as MachineRoom).ContainingRoom;
+                        this.SpeakAndPrint("You step away from the machine.");
+                        this.SpeakAndPrint(currentRoom.GetContents());
                     }
                     else
                     {
@@ -90,33 +92,47 @@ namespace Prototype.Game
                 case "F":
                     this.ProcessAttack(inputTokens);
                     break;
+
                 case "GET":
                     this.ProcessGet(inputTokens);
                     break;
+
                 case "GO":
                 case "G":
                     this.ProcessMove(inputTokens);
                     break;
+
                 case "INVENTORY":
                 case "INV":
                 case "I":
                     this.ListInventory();
                     break;
+
                 case "OPTIONS":
                 case "O":
                     this.ProcessOptions(inputTokens);
                     break;
+
                 case "PUT":
                 case "P":
                     this.ProcessPut(inputTokens);
                     break;
+
                 case "U":
-                case "USE":
+                case "USE":                    
                 case "B":
                 case "BUILD":
                 case "C":
                 case "CRAFT":
-                    this.UseWorkBench();
+                    if (command.StartsWith("U") && this.currentRoom.HasMachine())
+                    {
+                        this.currentRoom = this.currentRoom.GetConnection("Machine");
+                        this.SpeakAndPrint(this.currentRoom.GetContents());
+                    }
+                    else
+                    {
+                        this.UseWorkBench();
+                    }
                     break;
                 // TODO: use stairs: make sure there is no socket or it's solved
                 case "QUIT":
@@ -273,7 +289,7 @@ namespace Prototype.Game
                 else
                 {
                     var targetName = inputTokens[1];
-                    if (!this.currentRoom.IsConnectedTo(targetName))
+                    if (targetName.ToUpperInvariant().Contains("MACHINE") || !this.currentRoom.IsConnectedTo(targetName))
                     {
                         SpeakAndPrint($"There doesn't seem to be a way to go to {targetName} from here.", $"Can't go to {targetName} from here.");
                     }

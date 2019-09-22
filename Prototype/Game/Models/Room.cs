@@ -84,6 +84,11 @@ namespace Prototype.Game.Models
             return this.connectedTo.FirstOrDefault(r => r.Id.ToUpperInvariant().Contains(roomName.ToUpperInvariant()));
         }
 
+        internal bool HasMachine()
+        {
+            return this.connectedTo.SingleOrDefault(r => r is MachineRoom) != null;
+        }
+
         virtual protected string DetailedGetContents()
         {
             var builder = new StringBuilder();
@@ -102,7 +107,7 @@ namespace Prototype.Game.Models
             if (!this.IsSealed)
             {
                 builder.Append(" This room connects to ");
-                foreach (var room in this.connectedTo)
+                foreach (var room in this.connectedTo.Where(r => !(r is MachineRoom)))
                 {
                     builder.Append($"The {room.Id} room, ");
 
@@ -141,6 +146,11 @@ namespace Prototype.Game.Models
                 builder.Append("You see a workbench here. You can use it to build things.");
             }
 
+            if (this.connectedTo.Any(r => r is MachineRoom))
+            {
+                builder.Append("You see a huge machine here. You can USE it.");
+            }
+
             if (this.items.Any())
             {
                 this.items.ForEach(i => builder.Append($" You see a {i.Name}. "));
@@ -167,14 +177,9 @@ namespace Prototype.Game.Models
             if (!this.IsSealed)
             {
                 builder.Append(" Connects to ");
-                foreach (var room in this.connectedTo)
+                foreach (var room in this.connectedTo.Where(r => !(r is MachineRoom)))
                 {
                     builder.Append($"{room.Id}, ");
-
-                    if (this.connectedTo.Count > 1 && room == this.connectedTo[this.connectedTo.Count - 2])
-                    {
-                        builder.Append(" and ");
-                    }
                 };
                 builder.Append(" rooms.");
             }
@@ -205,6 +210,11 @@ namespace Prototype.Game.Models
             if (this.WorkBench != null)
             {
                 builder.Append("You see a usable workbench here.");
+            }
+
+            if (this.connectedTo.Any(r => r is MachineRoom))
+            {
+                builder.Append("You see a huge machine here. You can USE it.");
             }
 
             if (this.items.Any())
