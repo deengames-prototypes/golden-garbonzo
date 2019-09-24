@@ -71,12 +71,15 @@
     <Compile Include="Game\Options.cs" />
     <Compile Include="Game\WorkBench.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextToSpeech\DummySpeaker.cs" />
     <Compile Include="TextToSpeech\ISpeaker.cs" />
     <Compile Include="TextToSpeech\MicrosoftSpeaker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
