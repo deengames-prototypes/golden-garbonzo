@@ -52,6 +52,10 @@ namespace Prototype.Game
         {
             var inputTokens = input.ToUpperInvariant().Split(' ');
             var command = inputTokens[0];
+            if (Options.RepeatInput)
+            {
+                SpeakAndPrint($"You typed {input}");
+            }
 
             switch (command)
             {
