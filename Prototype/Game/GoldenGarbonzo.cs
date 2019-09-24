@@ -93,6 +93,12 @@ namespace Prototype.Game
                     this.ProcessAttack(inputTokens);
                     break;
 
+                case "CHARACTER":
+                case "STATS":
+                case "C":
+                case "S":
+                    this.ShowPlayerStats();
+                    break;
                 case "GET":
                     this.ProcessGet(inputTokens);
                     break;
@@ -122,7 +128,6 @@ namespace Prototype.Game
                 case "USE":                    
                 case "B":
                 case "BUILD":
-                case "C":
                 case "CRAFT":
                     if (command.StartsWith("U") && this.currentRoom.HasMachine())
                     {
@@ -155,6 +160,14 @@ namespace Prototype.Game
                     SpeakAndPrint($"Not sure how to {input}");
                     break;
             }
+        }
+
+        private void ShowPlayerStats()
+        {
+            this.SpeakAndPrint(
+                $"You have {player.CurrentHealth} out of {player.TotalHealth} health, {player.CurrentSkillPoints} out of {player.TotalSkillPoints} skill points, {player.ExperiencePoints} experience points.",
+                $"{player.CurrentHealth} out of {player.TotalHealth} health, {player.CurrentSkillPoints} out of {player.TotalSkillPoints} skill points, {player.ExperiencePoints} experience."
+                );
         }
 
         private void UseStairsIfPresent()

@@ -39,6 +39,8 @@ namespace Prototype.Game.Models
         {
             return $"{Name}: {CurrentHealth}/{TotalHealth} health";
         }
+
+        public int ExperiencePointsGain { get { return this.TotalHealth * this.Strength; } }
     }
 
     public enum MonsterType

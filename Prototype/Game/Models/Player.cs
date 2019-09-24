@@ -15,6 +15,8 @@ namespace Prototype.Game.Models
         public int TotalSkillPoints { get; private set; }
         public readonly List<Skill> Skills = new List<Skill>();
 
+        public int ExperiencePoints { get; set; } = 0;
+
         private readonly Dictionary<Skill, int> SkillCosts = new Dictionary<Skill, int>()
         {
             { Skill.Heal, 5 },
