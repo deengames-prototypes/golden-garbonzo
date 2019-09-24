@@ -1,4 +1,4 @@
-﻿using Prototype.Game.Battle;
+using Prototype.Game.Battle;
 using Prototype.Game.Models;
 using Prototype.Game.Models.Items;
 using Prototype.Game.Models.Items.Assemblable;

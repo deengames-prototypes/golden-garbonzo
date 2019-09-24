@@ -1,4 +1,4 @@
-﻿using Prototype.Game.Enums;
+using Prototype.Game.Enums;
 using Prototype.Game.Models.Items;
 using System;
 using System.Collections.Generic;
@@ -133,7 +133,7 @@ namespace Prototype.Game.Models
             var roomIndex = 0;
             
             // Don't seal the starting/final rooms (with stairs)
-            while (roomIndex == 0 || roomIndex == this.Rooms.Count - 1 || this.Rooms[roomIndex].IsLocked)
+            while (roomIndex == 0 || this.Rooms[roomIndex].Stairs != StairsType.NONE || this.Rooms[roomIndex].IsLocked)
             {
                 roomIndex = random.Next(this.Rooms.Count - 1);
             }

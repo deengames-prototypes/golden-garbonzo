@@ -1,4 +1,5 @@
-﻿using Prototype.Game.Models.Items;
+using Prototype.Game.Enums;
+using Prototype.Game.Models.Items;
 using Prototype.Game.Models.Items.Assemblable.Parts;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,9 @@ namespace Prototype.Game.Models
             b3.CreateMachineRoom();
 
             // 4) Socket on 3F
-            b3.GetRandomRoom().CreateGemSocket();
+            var socketRoom = b3.GetRandomRoom();
+            socketRoom.CreateGemSocket();
+            socketRoom.Stairs = StairsType.ESCAPE;
 
             // 5) Add constituent elements per floor
             b1.SpawnItems(new GlassBox(), new GlassLid());
