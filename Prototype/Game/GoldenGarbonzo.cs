@@ -342,14 +342,13 @@ namespace Prototype.Game
                     switch (Options.SpeechMode)
                     {
                         case SpeechMode.Detailed:
-                            winnerMessage = results.Winner == player ? $"you vanquish your foe! You had {player.CurrentHealth} out of {player.TotalHealth} health." : $"you collapse to the ground in a heap! (The {target.Name} has {target.CurrentHealth} out of {target.TotalHealth} health remaining.)";
+                            winnerMessage = results.Winner == player ? $"you vanquish your foe! You have {player.CurrentHealth} out of {player.TotalHealth} health." : $"you collapse to the ground in a heap! (The {target.Name} has {target.CurrentHealth} out of {target.TotalHealth} health remaining.)";
                             break;
                         case SpeechMode.Summary:
-                            winnerMessage = results.Winner == player ? $"you win!" : $"You die! {target.Name} has {target.CurrentHealth} health left.";
+                            winnerMessage = results.Winner == player ? $"yyou win!" : $"you lose! {target.Name} has {target.CurrentHealth} health left.";
                             break;
                     }                    
 
-                    player.CurrentHealth = player.TotalHealth;
                     SpeakAndPrint($"You attack a {target.Name}!", "Battle begins!");
 
                     switch (Options.CombatType)
@@ -363,12 +362,19 @@ namespace Prototype.Game
                     }
 
                     SpeakAndPrint($"After {results.RoundMessages.Length} rounds, {winnerMessage}", winnerMessage);
-                    if (results.Winner == player && target.Item != null)
+                    if (results.Winner == player)
                     {
-                        var item = target.Item;
-                        this.currentRoom.AddItem(item);
-                        this.SpeakAndPrint($"The {target.Name} drops a {item.Name}.");
-                        target.Item = null;
+                        if (target.Item != null)
+                        {
+                            var item = target.Item;
+                            this.currentRoom.AddItem(item);
+                            this.SpeakAndPrint($"The {target.Name} drops a {item.Name}.");
+                            target.Item = null;
+                        }
+                    }
+                    else
+                    {
+                        player.CurrentHealth = 1;
                     }
                     
                     if (this.currentRoom.IsSealed && !this.currentRoom.Monsters.Any(m => m.CurrentHealth > 0) && results.Winner == player)
