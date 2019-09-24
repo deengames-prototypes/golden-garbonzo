@@ -1,6 +1,6 @@
-﻿using Prototype.Game.Models.Items;
+﻿using Prototype.Game.Enums;
+using Prototype.Game.Models.Items;
 using Prototype.Game.Models.Items.Assemblable;
-using Prototype.Game.Models.Items.Assemblable.Parts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +11,25 @@ namespace Prototype.Game.Models
     {
         public List<AbstractItem> Inventory = new List<AbstractItem>();
 
+        public int CurrentSkillPoints { get; private set; }
+        public int TotalSkillPoints { get; private set; }
+        public readonly List<Skill> Skills = new List<Skill>();
+
+        private readonly Dictionary<Skill, int> SkillCosts = new Dictionary<Skill, int>()
+        {
+            { Skill.Heal, 5 },
+            { Skill.StoneSkin, 8 },
+            { Skill.PhaseShield, 12 },
+            { Skill.Kick, 5 },
+            { Skill.Teleport, 7 },
+            { Skill.Focus, 10 },
+        };
+
         public Player() : base("Player", 50, 7, 3, 2)
-        { }
+        {
+            this.TotalSkillPoints = 20;
+            this.CurrentSkillPoints = this.TotalSkillPoints;
+        }
 
         internal void RemoveItem(string itemName)
         {
