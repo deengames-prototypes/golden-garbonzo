@@ -38,14 +38,14 @@ namespace Prototype.Game.Battle
         // One round of combat
         private string Attack(Monster attacker, Monster defender)
         {
-            var damage = attacker.Strength - defender.Defense;
+            var damage = (attacker.Strength - defender.Defense) * attacker.AttacksPerRound;
             defender.CurrentHealth -= damage;
             var message = "";
 
             switch (Options.SpeechMode)
             {
                 case SpeechMode.Detailed:
-                    message = $"{attacker.Name} with {attacker.CurrentHealth} health attacks for {damage} damage";
+                    message = $"{attacker.Name} with {attacker.CurrentHealth} health attacks {attacker.AttacksPerRound} times for {damage} damage";
                     break;
                 case SpeechMode.Summary:
                     message = $"{attacker.Name} attacks {defender.Name}.";

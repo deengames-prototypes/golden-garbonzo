@@ -11,7 +11,7 @@ namespace Prototype.Game.Models
     {
         public List<AbstractItem> Inventory = new List<AbstractItem>();
 
-        public Player() : base("Player", 50, 7, 3)
+        public Player() : base("Player", 50, 7, 3, 2)
         { }
 
         internal void RemoveItem(string itemName)
