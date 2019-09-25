@@ -1,10 +1,10 @@
 using Prototype.Game.Battle;
+using Prototype.Game.Enums;
 using Prototype.Game.Models;
 using Prototype.Game.Models.Items;
 using Prototype.Game.Models.Items.Assemblable;
 using Prototype.TextToSpeech;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Prototype.Game
@@ -104,6 +104,11 @@ namespace Prototype.Game
                     this.ProcessMove(inputTokens);
                     break;
 
+                case "HEAL":
+                case "H":
+                    this.TrySkill(Skill.Heal);
+                    break;
+
                 case "INVENTORY":
                 case "INV":
                 case "I":
@@ -156,6 +161,25 @@ namespace Prototype.Game
                 default:
                     SpeakAndPrint($"Not sure how to {input}");
                     break;
+            }
+        }
+
+        private void TrySkill(Enums.Skill skill)
+        {
+            var skillCost = Player.SkillCosts[skill];
+            if (!player.Skills.Contains(skill))
+            {
+                SpeakAndPrint($"You haven't learned {skill.ToString()}.");
+            }
+            else if (player.CurrentSkillPoints < skillCost)
+            {
+                SpeakAndPrint($"Not enough skill points (have {player.CurrentSkillPoints}, need {skillCost})");
+            }
+            else
+            {
+                SkillExecutor.Execute(skill, player);
+                player.CurrentSkillPoints -= skillCost;
+                SpeakAndPrint("You heal to full health.");
             }
         }
 

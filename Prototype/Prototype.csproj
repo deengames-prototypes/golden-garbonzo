@@ -70,6 +70,7 @@
     <Compile Include="Game\Models\Room.cs" />
     <Compile Include="Game\GlobalConfig.cs" />
     <Compile Include="Game\Options.cs" />
+    <Compile Include="Game\SkillExecutor.cs" />
     <Compile Include="Game\WorkBench.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="TextToSpeech\DummySpeaker.cs" />

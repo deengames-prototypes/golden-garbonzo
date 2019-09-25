@@ -13,14 +13,14 @@ namespace Prototype.Game.Models
 
         public List<AbstractItem> Inventory = new List<AbstractItem>();
 
-        public int CurrentSkillPoints { get; private set; }
+        public int CurrentSkillPoints { get; set; }
         public int TotalSkillPoints { get; private set; }
-        public readonly List<Skill> Skills = new List<Skill>();
+        public readonly List<Skill> Skills = new List<Skill>() { Skill.Heal };
 
         public int Level { get; private set; } = 1;
         new public int ExperiencePoints { get; private set; } = 0;
 
-        private readonly Dictionary<Skill, int> SkillCosts = new Dictionary<Skill, int>()
+        internal static readonly Dictionary<Skill, int> SkillCosts = new Dictionary<Skill, int>()
         {
             { Skill.Heal, 5 },
             { Skill.StoneSkin, 8 },
