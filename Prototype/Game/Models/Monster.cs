@@ -9,9 +9,9 @@ namespace Prototype.Game.Models
         public int TotalHealth { get; set; }
         public string Name { get; set; }
         public int Strength { get; set; }
-        public int Defense { get; set; }
         public int AttacksPerRound { get; set; }
         public AbstractItem Item { get; set; }
+        private int defense = 0;
 
         public static Monster Generate(MonsterType type)
         {
@@ -30,7 +30,7 @@ namespace Prototype.Game.Models
             this.CurrentHealth = health;
             this.TotalHealth = health;
             this.Strength = strength;
-            this.Defense = defense;
+            this.defense = defense;
             this.AttacksPerRound = attacksPerRound;
         }
 
@@ -39,7 +39,11 @@ namespace Prototype.Game.Models
             return $"{Name}: {CurrentHealth}/{TotalHealth} health";
         }
 
-        public int ExperiencePoints { get { return this.TotalHealth * this.Strength; } }
+        public int ExperiencePoints { get {
+            return this.TotalHealth * this.Strength;
+        } }
+
+        public virtual int Defense {  get { return this.defense;  } }
     }
 
     public enum MonsterType

@@ -10,6 +10,7 @@ namespace Prototype.Game.Models
     class Player : Monster
     {
         private const float HEAL_PERCENT_PER_MOVE = 0.2f;
+        private const float STONE_SKIN_DEFENSE_MULITPLIER = 2f;
         private const int STONE_SKIN_TURNS_PER_USE = 3;
 
         public List<AbstractItem> Inventory = new List<AbstractItem>();
@@ -37,6 +38,16 @@ namespace Prototype.Game.Models
         {
             this.TotalSkillPoints = 20;
             this.CurrentSkillPoints = this.TotalSkillPoints;
+        }
+
+        public override int Defense
+        {
+            get
+            {
+                var baseDefense = base.Defense;
+                var multiplier = (this.HasStoneSkin() ? STONE_SKIN_DEFENSE_MULITPLIER : 1);
+                return (int)(baseDefense * multiplier);
+            }
         }
 
         internal void RemoveItem(string itemName)
