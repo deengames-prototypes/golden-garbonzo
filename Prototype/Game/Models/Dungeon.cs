@@ -30,7 +30,7 @@ namespace Prototype.Game.Models
             // Demo requirements. Not as complex as I hoped.
             // 1) Lock a room on 1F with a gem inside
             var gemRoom = b1.GetRandomRoom();
-            gemRoom.AddToRandomMonster(new Gemstone());
+            gemRoom.AddToRandomMonster(new Gemstone(), false);
             gemRoom.IsLocked = true;
 
             // 2) Key on 2F

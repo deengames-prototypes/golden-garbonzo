@@ -9,13 +9,16 @@ namespace Prototype.Game.Models
 {
     class Player : Monster
     {
+        private const float HEAL_PERCENT_PER_MOVE = 0.2f;
+
         public List<AbstractItem> Inventory = new List<AbstractItem>();
 
         public int CurrentSkillPoints { get; private set; }
         public int TotalSkillPoints { get; private set; }
         public readonly List<Skill> Skills = new List<Skill>();
 
-        public int ExperiencePoints { get; set; } = 0;
+        public int Level { get; private set; } = 1;
+        new public int ExperiencePoints { get; private set; } = 0;
 
         private readonly Dictionary<Skill, int> SkillCosts = new Dictionary<Skill, int>()
         {
@@ -68,6 +71,33 @@ namespace Prototype.Game.Models
             }
 
             return null;
+        }
+        
+        /// <summary>
+        /// Gain the specified amount of experience points.
+        /// </summary>
+        /// <returns>True if the player leveled up; otherwise, false.</returns>
+        internal bool GainExperience(int xp)
+        {
+            this.ExperiencePoints += xp;
+            if (this.ExperiencePoints >= this.MaxExperiencePointsForCurrentLevel())
+            {
+                this.Level++;
+                return true;
+            }
+
+            return false;
+        }
+
+        internal void Heal()
+        {
+            int healAmount = (int)(this.TotalHealth * HEAL_PERCENT_PER_MOVE);
+            this.CurrentHealth = Math.Min(this.CurrentHealth + healAmount, this.TotalHealth);
+        }
+
+        private int MaxExperiencePointsForCurrentLevel()
+        {
+            return 500 + (this.Level * 500); // 500 + 500n (1000, 1500, 2000, 2500, ...)
         }
     }
 }

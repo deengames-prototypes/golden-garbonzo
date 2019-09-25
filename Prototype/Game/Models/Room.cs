@@ -265,9 +265,15 @@ namespace Prototype.Game.Models
             return item;
         }
 
-        internal void AddToRandomMonster(AbstractItem item)
+        internal void AddToRandomMonster(AbstractItem item, bool canBeOnGoblin = true)
         {
-            var monster = this.Monsters[random.Next(this.Monsters.Count)];
+            var candidateMonsters = this.Monsters;
+            if (!canBeOnGoblin)
+            {
+                candidateMonsters = candidateMonsters.Where(c => !c.Name.ToUpperInvariant().Contains("GOBLIN")).ToList();
+            }
+
+            var monster = candidateMonsters[random.Next(candidateMonsters.Count)];
             monster.Item = item;
         }
 

@@ -22,7 +22,6 @@ namespace Prototype.Game.Models
                 case MonsterType.Strong: return new Monster("Goblin", 80, 11, 5, 2);
                 default: throw new InvalidOperationException($"Not sure how to create a monster of type: {type}");
             }
-
         }
 
         protected Monster(string name, int health, int strength, int defense, int attacksPerRound)
@@ -40,7 +39,7 @@ namespace Prototype.Game.Models
             return $"{Name}: {CurrentHealth}/{TotalHealth} health";
         }
 
-        public int ExperiencePointsGain { get { return this.TotalHealth * this.Strength; } }
+        public int ExperiencePoints { get { return this.TotalHealth * this.Strength; } }
     }
 
     public enum MonsterType

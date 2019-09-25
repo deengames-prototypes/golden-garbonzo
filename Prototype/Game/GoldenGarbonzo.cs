@@ -52,10 +52,6 @@ namespace Prototype.Game
         {
             var inputTokens = input.ToUpperInvariant().Split(' ');
             var command = inputTokens[0];
-            if (Options.RepeatInput)
-            {
-                SpeakAndPrint($"You typed {input}");
-            }
 
             switch (command)
             {
@@ -129,6 +125,7 @@ namespace Prototype.Game
                 case "B":
                 case "BUILD":
                 case "CRAFT":
+                case "CR":
                     if (command.StartsWith("U") && this.currentRoom.HasMachine())
                     {
                         this.currentRoom = this.currentRoom.GetConnection("Machine");
@@ -358,7 +355,7 @@ namespace Prototype.Game
                             winnerMessage = results.Winner == player ? $"you vanquish your foe! You have {player.CurrentHealth} out of {player.TotalHealth} health." : $"you collapse to the ground in a heap! (The {target.Name} has {target.CurrentHealth} out of {target.TotalHealth} health remaining.)";
                             break;
                         case SpeechMode.Summary:
-                            winnerMessage = results.Winner == player ? $"yyou win!" : $"you lose! {target.Name} has {target.CurrentHealth} health left.";
+                            winnerMessage = results.Winner == player ? $"you win!" : $"you lose! {target.Name} has {target.CurrentHealth} health left.";
                             break;
                     }                    
 
@@ -384,6 +381,14 @@ namespace Prototype.Game
                             this.SpeakAndPrint($"The {target.Name} drops a {item.Name}.");
                             target.Item = null;
                         }
+
+                        var didLevelUp = player.GainExperience(target.ExperiencePoints);
+                        var message = $"You get {target.ExperiencePoints} experience.";
+                        if (didLevelUp)
+                        {
+                            message += $" You reached level {player.Level}!";
+                        }
+                        this.SpeakAndPrint(message);
                     }
                     else
                     {
@@ -438,6 +443,7 @@ namespace Prototype.Game
                         {
                             this.currentRoom = targetRoom;
                             SpeakAndPrint(this.currentRoom.GetContents());
+                            player.Heal();
                         }
                     }
                 }
@@ -520,7 +526,7 @@ namespace Prototype.Game
 
         private void SpeakAndPrint(string longFormText, string shortFormText = null)
         {
-            var text = shortFormText == null ? longFormText : shortFormText;
+            var text = shortFormText == null || Options.SpeechMode == SpeechMode.Detailed ? longFormText : shortFormText;
             Console.WriteLine(text);
             this.speaker.Speak(text);
         }

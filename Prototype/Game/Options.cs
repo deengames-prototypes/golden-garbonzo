@@ -4,7 +4,6 @@
     {
         public static CombatType CombatType = CombatType.RoundByRound;
         public static SpeechMode SpeechMode = SpeechMode.Detailed;
-        public const bool RepeatInput = true;
     }
 
     public enum CombatType
