@@ -10,15 +10,18 @@ namespace Prototype.Game.Models
     class Player : Monster
     {
         private const float HEAL_PERCENT_PER_MOVE = 0.2f;
+        private const int STONE_SKIN_TURNS_PER_USE = 3;
 
         public List<AbstractItem> Inventory = new List<AbstractItem>();
 
         public int CurrentSkillPoints { get; set; }
         public int TotalSkillPoints { get; private set; }
-        public readonly List<Skill> Skills = new List<Skill>() { Skill.Heal };
+        public readonly List<Skill> Skills = new List<Skill>() { Skill.Heal, Skill.StoneSkin };
 
         public int Level { get; private set; } = 1;
         new public int ExperiencePoints { get; private set; } = 0;
+
+        private int TurnsOfStoneSkinLeft = 0;
 
         internal static readonly Dictionary<Skill, int> SkillCosts = new Dictionary<Skill, int>()
         {
@@ -95,9 +98,33 @@ namespace Prototype.Game.Models
             this.CurrentHealth = Math.Min(this.CurrentHealth + healAmount, this.TotalHealth);
         }
 
+        internal void AddStoneSkin()
+        {
+            this.TurnsOfStoneSkinLeft += STONE_SKIN_TURNS_PER_USE;
+        }
+
+        internal string PostBattleRound()
+        {
+            if (this.HasStoneSkin())
+            {
+                this.TurnsOfStoneSkinLeft -= 1;
+                if (!this.HasStoneSkin())
+                {
+                    return "Your stone-armoured skin returns to normal.";
+                }
+            }
+
+            return null;
+        }
+
         private int MaxExperiencePointsForCurrentLevel()
         {
             return 500 + (this.Level * 500); // 500 + 500n (1000, 1500, 2000, 2500, ...)
+        }
+
+        internal bool HasStoneSkin()
+        {
+            return this.TurnsOfStoneSkinLeft > 0;
         }
     }
 }

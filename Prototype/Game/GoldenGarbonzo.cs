@@ -40,7 +40,7 @@ namespace Prototype.Game
                 Console.Write("> ");
                 input = Console.ReadLine();
                 this.speaker.StopAndClearQueue();
-                SpeakAndPrint($"You typed: {input}", "");
+                SpeakAndPrint($"You typed: {input}");
                 this.ProcessInput(input);
             }
 
@@ -104,9 +104,15 @@ namespace Prototype.Game
                     this.ProcessMove(inputTokens);
                     break;
 
+                // Skills
                 case "HEAL":
                 case "H":
                     this.TrySkill(Skill.Heal);
+                    break;
+                case "STONE SKIN":
+                case "STONE":
+                case "SS":
+                    this.TrySkill(Skill.StoneSkin);
                     break;
 
                 case "INVENTORY":
@@ -177,18 +183,23 @@ namespace Prototype.Game
             }
             else
             {
-                SkillExecutor.Execute(skill, player);
+                var message = SkillExecutor.Execute(skill, player);
                 player.CurrentSkillPoints -= skillCost;
-                SpeakAndPrint("You heal to full health.");
+                SpeakAndPrint(message);
             }
         }
 
         private void ShowPlayerStats()
         {
-            this.SpeakAndPrint(
-                $"You have {player.CurrentHealth} out of {player.TotalHealth} health, {player.CurrentSkillPoints} out of {player.TotalSkillPoints} skill points, {player.ExperiencePoints} experience points.",
-                $"{player.CurrentHealth} out of {player.TotalHealth} health, {player.CurrentSkillPoints} out of {player.TotalSkillPoints} skill points, {player.ExperiencePoints} experience."
-                );
+            var message = $"You have {player.CurrentHealth} out of {player.TotalHealth} health," +
+                $"{player.CurrentSkillPoints} out of {player.TotalSkillPoints} skill points, {player.ExperiencePoints} experience points.";
+            
+            if (player.HasStoneSkin())
+            {
+                message += " Stone reinforces your skin.";
+            }
+
+            this.SpeakAndPrint(message);
         }
 
         private void UseStairsIfPresent()
@@ -393,9 +404,16 @@ namespace Prototype.Game
                                 SpeakAndPrint(round);
                             }
                             break;
+                        case CombatType.Summary:
+                            var messages = results.RoundMessages.Where(r => r.ToUpperInvariant().Contains("SKIN"));
+                            foreach (var message in messages)
+                            {
+                                SpeakAndPrint(message);
+                            }
+                            break;
                     }
 
-                    SpeakAndPrint($"After {results.RoundMessages.Length} rounds, {winnerMessage}", winnerMessage);
+                    SpeakAndPrint($"After {results.RoundMessages.Length / 2} rounds, {winnerMessage}", winnerMessage);
                     if (results.Winner == player)
                     {
                         if (target.Item != null)

@@ -26,6 +26,23 @@ namespace Prototype.Game.Battle
                 {
                     messages.Add(this.Attack(defender, attacker));
                 }
+
+                if (attacker is Player)
+                {
+                    var message = (attacker as Player).PostBattleRound();
+                    if (!string.IsNullOrWhiteSpace(message))
+                    {
+                        messages.Add(message);
+                    }
+                }
+                if (defender is Player)
+                {
+                    var message = (defender as Player).PostBattleRound();
+                    if (!string.IsNullOrWhiteSpace(message))
+                    {
+                        messages.Add(message);
+                    }
+                }
             }
 
             results.Winner = attacker.CurrentHealth > 0 ? attacker : defender;
