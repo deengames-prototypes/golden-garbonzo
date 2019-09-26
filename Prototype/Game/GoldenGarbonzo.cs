@@ -88,7 +88,6 @@ namespace Prototype.Game
                 case "F":
                     this.ProcessAttack(inputTokens);
                     break;
-
                 case "CHARACTER":
                 case "STATS":
                 case "C":
@@ -118,6 +117,10 @@ namespace Prototype.Game
                 case "PHASE":
                 case "PS":
                     this.TrySkill(Skill.PhaseShield);
+                    break;
+                case "KICK":
+                case "K":
+                    this.ProcessKick(inputTokens);
                     break;
 
                 case "INVENTORY":
@@ -368,6 +371,54 @@ namespace Prototype.Game
                         if (this.currentRoom.Socket.IsSolved())
                         {
                             SpeakAndPrint($"The stairs leading {this.currentRoom.StairsString()} appear!");
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ProcessKick(string[] inputTokens)
+        {
+            // This is a copy-paste of ProcessAttack
+            if (inputTokens.Length != 2)
+            {
+                SpeakAndPrint("Type kick and then the name of the target. Type list to list targets.");
+            }
+            else
+            {
+                var targetName = inputTokens[1];
+                if (!this.currentRoom.HasMonster(targetName))
+                {
+                    SpeakAndPrint($"There is no {targetName} here");
+                }
+                else
+                {
+                    // This is a copy-paste of TrySkill(Skill.Kick)
+                    var skill = Skill.Kick;
+                    var skillCost = Player.SkillCosts[skill];
+                    if (!player.Skills.Contains(skill))
+                    {
+                        SpeakAndPrint($"You haven't learned {skill.ToString()}.");
+                    }
+                    else if (player.CurrentSkillPoints < skillCost)
+                    {
+                        SpeakAndPrint($"Not enough skill points (have {player.CurrentSkillPoints}, need {skillCost})");
+                    }
+                    else
+                    {
+                        var target = this.currentRoom.GetMonster(targetName);
+                        var damage = (int)(player.Strength * Player.KICK_MULTIPLIER) - target.Defense;
+                        SpeakAndPrint($"You kick the {target.Name} for {damage} damage!");
+                        target.CurrentHealth -= damage;
+
+                        // Start a battle
+                        if (target.CurrentHealth > 0)
+                        {
+                            this.ProcessAttack(inputTokens);
+                        }
+                        else
+                        {
+                            this.SpeakAndPrint($"The {target.Name} dies!");
                         }
                     }
                 }

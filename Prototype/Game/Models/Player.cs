@@ -9,6 +9,8 @@ namespace Prototype.Game.Models
 {
     class Player : Monster
     {
+        public const float KICK_MULTIPLIER = 3.5f;
+
         private const float HEAL_PERCENT_PER_MOVE = 0.2f;
         private const float STONE_SKIN_DEFENSE_MULITPLIER = 2f;
         private const int STONE_SKIN_TURNS_PER_USE = 3;
@@ -17,7 +19,7 @@ namespace Prototype.Game.Models
 
         public int CurrentSkillPoints { get; set; }
         public int TotalSkillPoints { get; private set; }
-        public readonly List<Skill> Skills = new List<Skill>() { Skill.PhaseShield };
+        public readonly List<Skill> Skills = new List<Skill>() { Skill.Kick };
 
         public int Level { get; private set; } = 1;
         new public int ExperiencePoints { get; private set; } = 0;
