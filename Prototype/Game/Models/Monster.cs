@@ -11,7 +11,7 @@ namespace Prototype.Game.Models
         public int Strength { get; set; }
         public int AttacksPerRound { get; set; }
         public AbstractItem Item { get; set; }
-        private int defense = 0;
+        protected int defense = 0;
 
         public static Monster Generate(MonsterType type)
         {
@@ -43,7 +43,11 @@ namespace Prototype.Game.Models
             return this.TotalHealth * this.Strength;
         } }
 
-        public virtual int Defense {  get { return this.defense;  } }
+        public virtual int Defense
+        {
+            get { return this.defense;  }
+            set { this.defense = value; }
+        }
     }
 
     public enum MonsterType

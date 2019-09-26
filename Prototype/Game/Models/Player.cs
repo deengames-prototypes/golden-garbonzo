@@ -11,6 +11,8 @@ namespace Prototype.Game.Models
     {
         public const float KICK_MULTIPLIER = 3.5f;
         public const float NANITE_DAMAGE_PERCENT = 0.25f; // 0.3f => damage 30% of monsters' max health
+        public const int HEALTH_GROWTH_ON_STAT_POINT = 5;
+        public const int STR_DEF_GROWTH_ON_STAT_POINT = 1;
 
         private const float HEAL_PERCENT_PER_MOVE = 0.2f;
         private const float STONE_SKIN_DEFENSE_MULITPLIER = 2f;

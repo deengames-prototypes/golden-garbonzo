@@ -220,8 +220,9 @@ namespace Prototype.Game
 
         private void ShowPlayerStats()
         {
-            var message = $"You have {player.CurrentHealth} out of {player.TotalHealth} health," +
-                $"{player.CurrentSkillPoints} out of {player.TotalSkillPoints} skill points, {player.ExperiencePoints} experience points.";
+            var message = $"You have {player.CurrentHealth} out of {player.TotalHealth} health, " +
+                $"{player.CurrentSkillPoints} out of {player.TotalSkillPoints} skill points, {player.ExperiencePoints} experience points." +
+                $"You have {player.Strength} strength and {player.Defense} defense.";
             
             if (player.HasStoneSkin())
             {
@@ -518,18 +519,18 @@ namespace Prototype.Game
                         if (didLevelUp)
                         {
                             this.SpeakAndPrint($" You reached level {player.Level}!");
+
+                            // Grant a skill
                             if (Player.SkillChoicesByLevel.ContainsKey(player.Level))
                             {
                                 var skills = Player.SkillChoicesByLevel[player.Level];
-                                this.EnumerateSkills(skills);
-                                this.SpeakAndPrint("Type the number of the skill to learn, or question-mark to list them again.");
 
-                                var input = Console.ReadLine();
+                                var input = "";
                                 int response = 0;
                                 while (!int.TryParse(input, out response) || response < 1 || response > skills.Count)
                                 {
-                                    this.EnumerateSkills(skills);
                                     this.SpeakAndPrint("Type the number of the skill to learn, or question-mark to list them again.");
+                                    this.EnumerateSkills(skills);
                                     input = Console.ReadLine();
                                 }
 
@@ -538,6 +539,33 @@ namespace Prototype.Game
                                 var skillKey = SkillKeyBinding[pickedSkill];
                                 this.SpeakAndPrint($"You learned {pickedSkill.ToString()}. Type {skillKey} when you want to use it.");
                             }
+
+                            // Grant a +5 to HP or +1 to str/def
+                            var choice = "";
+                            int asInt = 0;
+                            while (!int.TryParse(choice, out asInt) || asInt < 1 || asInt > 3)
+                            {
+                                this.SpeakAndPrint(" You gained a permanent stats boost. Type 1 to increase your maximum health, type 2 to increase strength, type 3 to increase defense.");
+                                choice = Console.ReadLine();
+                            }
+                            switch (asInt)
+                            {
+                                case 1:
+                                    player.TotalHealth += Player.HEALTH_GROWTH_ON_STAT_POINT;
+                                    player.CurrentHealth += Player.HEALTH_GROWTH_ON_STAT_POINT;
+                                    this.SpeakAndPrint($" You gain {Player.HEALTH_GROWTH_ON_STAT_POINT} health. You now have {player.TotalHealth} total health.");
+                                    break;
+                                case 2:
+                                    player.Strength += Player.STR_DEF_GROWTH_ON_STAT_POINT;
+                                    this.SpeakAndPrint($" You gain a strength point; you now have {player.Strength}.");
+                                    break;
+                                case 3:
+                                    player.Defense += Player.STR_DEF_GROWTH_ON_STAT_POINT;
+                                    this.SpeakAndPrint($" You gain a defense point; you now have {player.Defense}. ");
+                                    break;
+
+                            }
+
                         }
                     }
                     else
