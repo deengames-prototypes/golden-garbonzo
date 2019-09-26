@@ -577,7 +577,7 @@ namespace Prototype.Game
                     if (this.currentRoom.IsSealed && !this.currentRoom.Monsters.Any(m => m.CurrentHealth > 0) && results.Winner == player)
                     {
                         this.currentRoom.IsSealed = false;
-                        SpeakAndPrint("The pressurized seals on all the doors dissipate.");
+                        SpeakAndPrint("The forcefield surrounding the room disappears.");
                     }
                 }
             }
@@ -611,7 +611,7 @@ namespace Prototype.Game
             {
                 if (this.currentRoom.IsSealed)
                 {
-                    SpeakAndPrint("You can't leave - all the doors are sealed shut!", "The doors are sealed.");
+                    SpeakAndPrint("You can't leave - all the doors are blocked by a forcefield!", "A forcefield blocks the doors.");
                 }
                 else
                 {

@@ -134,7 +134,7 @@ namespace Prototype.Game.Models
             }
             else
             {
-                builder.Append("All the doors are sealed shut!");
+                builder.Append("A forcefield blocks all the exits!");
             }
 
             // Presence of an incomplete gem socket hides stairs
@@ -153,7 +153,7 @@ namespace Prototype.Game.Models
                 {
                     socketsMessage = $"{Socket.GemsSocketed} of them hold gems. ";
                 }
-                builder.Append($". You see a socket in the wall with {Socket.RequiredGems} slots in it. {socketsMessage} ");
+                builder.Append($". You see a socket in the wall with {Socket.RequiredGems} slots in it. {socketsMessage} You can PUT stuff in it.");
             }
 
             if (this.WorkBench != null)
@@ -209,7 +209,7 @@ namespace Prototype.Game.Models
             }
             else
             {
-                builder.Append("The doors are sealed!");
+                builder.Append("A forcefield blocks all the doors!");
             }
 
             // Presence of an incomplete gem socket hides stairs
@@ -228,7 +228,7 @@ namespace Prototype.Game.Models
                 {
                     socketsMessage = $"{Socket.GemsSocketed} of them hold gems. ";
                 }
-                builder.Append($". You see a socket in the wall with {Socket.RequiredGems} slots in it. {socketsMessage} ");
+                builder.Append($". You see a socket in the wall with {Socket.RequiredGems} slots in it. {socketsMessage} You can PUT stuff in it.");
             }
 
             if (this.WorkBench != null)

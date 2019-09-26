@@ -35,6 +35,8 @@ namespace Prototype.Game.Models
 
             // 2) Key on 2F
             b2.GetRandomRoom().AddToRandomMonster(new DoorKey());
+            // Dunno why that doesn't always work. For good measure, add one to 3F.
+            b3.GetRandomRoom().AddToRandomMonster(new DoorKey());
 
             // 3) Machine puzzle on 3F
             b3.CreateMachineRoom();

@@ -153,7 +153,7 @@ namespace Prototype.Game.Models
 
         private int MaxExperiencePointsForCurrentLevel()
         {
-            return 800 + (this.Level * 1000); // 800, 1800, 2800, ...
+            return 800 + ((this.Level - 1) * 1500); // 800, 1800, 2800, ...
         }
 
         internal bool HasStoneSkin()

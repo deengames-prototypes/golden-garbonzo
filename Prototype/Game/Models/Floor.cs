@@ -100,7 +100,7 @@ namespace Prototype.Game.Models
 
         internal void AddWorkBenchToRandomRoom()
         {
-            var room = this.GetRandomRoom();
+            var room = this.GetRandomEmptyRoom();
             room.CreateWorkBench();
         }
 
@@ -144,7 +144,7 @@ namespace Prototype.Game.Models
 
         internal void CreateMachineRoom()
         {
-            var room = this.GetRandomRoom();
+            var room = this.GetRandomEmptyRoom();
             room.ConnectTo(new MachineRoom(room));
         }
 
@@ -159,6 +159,21 @@ namespace Prototype.Game.Models
             }
 
             return this.Rooms[roomIndex];
+        }
+
+        // Room with no bench, machine, or socket
+        private Room GetRandomEmptyRoom()
+        {
+            var room = this.Rooms[0];
+
+            // Not 100% necessary. Socket can coexist, since you just PUT stuff in it.
+            while (room.WorkBench != null || room.Socket != null || room.HasMachine() || room.Stairs == StairsType.NEXT_FLOOR)
+            {
+                var roomIndex = random.Next(this.Rooms.Count - 1);
+                room = this.Rooms[roomIndex];
+            }
+
+            return room;
         }
     }
 }
