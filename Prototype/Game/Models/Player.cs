@@ -17,7 +17,7 @@ namespace Prototype.Game.Models
         public const int HEALTH_GROWTH_ON_STAT_POINT = 5;
         public const int STR_DEF_GROWTH_ON_STAT_POINT = 1;
 
-        private const float HEAL_PERCENT_PER_MOVE = 0.2f;
+        private const float HEAL_PERCENT_PER_MOVE = 0.3f;
         private const int SKILL_POINTS_REGAIN_PER_MOVE = 3; // Need to heal? Leave and come back, DONE.
         
         public List<AbstractItem> Inventory = new List<AbstractItem>();
@@ -25,7 +25,7 @@ namespace Prototype.Game.Models
         public int CurrentSkillPoints { get; set; }
         public int TotalSkillPoints { get; private set; }
         public bool IsFocused = false;
-        public readonly List<Skill> Skills = new List<Skill>() { Skill.Heal, Skill.NanoSwarm };
+        public readonly List<Skill> Skills = new List<Skill>();
 
         public int Level { get; private set; } = 1;
         new public int ExperiencePoints { get; private set; } = 0;
@@ -47,8 +47,8 @@ namespace Prototype.Game.Models
         internal static readonly Dictionary<int, List<Skill>> SkillChoicesByLevel = new Dictionary<int, List<Skill>>()
         {
             { 2, new List<Skill>() { Skill.Heal, Skill.Kick } },
-            { 3, new List<Skill>() { Skill.Heal, Skill.Kick } },
-            { 4, new List<Skill>() { Skill.Heal, Skill.Kick } },
+            { 3, new List<Skill>() { Skill.StoneSkin, Skill.Focus } },
+            { 4, new List<Skill>() { Skill.PhaseShield, Skill.NanoSwarm } },
         };
 
         public Player() : base("Player", 50, 7, 3, 2)
@@ -153,7 +153,7 @@ namespace Prototype.Game.Models
 
         private int MaxExperiencePointsForCurrentLevel()
         {
-            return 500 + (this.Level * 500); // 500 + 500n (1000, 1500, 2000, 2500, ...)
+            return 800 + (this.Level * 1000); // 800, 1800, 2800, ...
         }
 
         internal bool HasStoneSkin()

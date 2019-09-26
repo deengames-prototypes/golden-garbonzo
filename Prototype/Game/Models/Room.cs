@@ -301,7 +301,6 @@ namespace Prototype.Game.Models
                         if (maxGoblins > 0 && picked < GlobalConfig.MONSTER_PROBABILITY[MonsterType.Strong] + weightSoFar)
                         {
                             this.Monsters.Add(Monster.Generate(MonsterType.Strong));
-                            Console.WriteLine($"Goblin on {this.floorNum}F");
                         }
                         else
                         {
