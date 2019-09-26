@@ -40,6 +40,13 @@ namespace Prototype.Game.Models
             { Skill.NanoSwarm, 12 },
         };
 
+        internal static readonly Dictionary<int, List<Skill>> SkillChoicesByLevel = new Dictionary<int, List<Skill>>()
+        {
+            { 2, new List<Skill>() { Skill.Heal, Skill.Kick } },
+            { 3, new List<Skill>() { Skill.Heal, Skill.Kick } },
+            { 4, new List<Skill>() { Skill.Heal, Skill.Kick } },
+        };
+
         public Player() : base("Player", 50, 7, 3, 2)
         {
             this.TotalSkillPoints = 20;

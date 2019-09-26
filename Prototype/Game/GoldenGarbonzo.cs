@@ -5,6 +5,8 @@ using Prototype.Game.Models.Items;
 using Prototype.Game.Models.Items.Assemblable;
 using Prototype.TextToSpeech;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace Prototype.Game
@@ -16,6 +18,17 @@ namespace Prototype.Game
         private Player player = new Player();
         private Dungeon dungeon = new Dungeon();
         private int currentFloor = 0;
+
+        // This shouldn't be here?
+        private readonly Dictionary<Skill, string> SkillKeyBinding = new Dictionary<Skill, string>()
+        {
+            { Skill.Heal, "HEAL" },
+            { Skill.StoneSkin, "STONE" },
+            { Skill.PhaseShield, "PHASE" },
+            { Skill.Kick, "KICK" },
+            { Skill.Focus, "FOCUS" },
+            { Skill.NanoSwarm, "SWARM" },
+        };
 
         public void Run()
         {
@@ -500,11 +513,32 @@ namespace Prototype.Game
 
                         var didLevelUp = player.GainExperience(target.ExperiencePoints);
                         var message = $"You get {target.ExperiencePoints} experience.";
+                        this.SpeakAndPrint(message);
+
                         if (didLevelUp)
                         {
-                            message += $" You reached level {player.Level}!";
+                            this.SpeakAndPrint($" You reached level {player.Level}!");
+                            if (Player.SkillChoicesByLevel.ContainsKey(player.Level))
+                            {
+                                var skills = Player.SkillChoicesByLevel[player.Level];
+                                this.EnumerateSkills(skills);
+                                this.SpeakAndPrint("Type the number of the skill to learn, or question-mark to list them again.");
+
+                                var input = Console.ReadLine();
+                                int response = 0;
+                                while (!int.TryParse(input, out response) || response < 1 || response > skills.Count)
+                                {
+                                    this.EnumerateSkills(skills);
+                                    this.SpeakAndPrint("Type the number of the skill to learn, or question-mark to list them again.");
+                                    input = Console.ReadLine();
+                                }
+
+                                var pickedSkill = skills[response - 1];
+                                player.Skills.Add(pickedSkill);
+                                var skillKey = SkillKeyBinding[pickedSkill];
+                                this.SpeakAndPrint($"You learned {pickedSkill.ToString()}. Type {skillKey} when you want to use it.");
+                            }
                         }
-                        this.SpeakAndPrint(message);
                     }
                     else
                     {
@@ -517,6 +551,24 @@ namespace Prototype.Game
                         SpeakAndPrint("The pressurized seals on all the doors dissipate.");
                     }
                 }
+            }
+        }
+
+        private void EnumerateSkills(List<Skill> skills)
+        {
+            this.SpeakAndPrint(" Please pick one of the following skills:");
+
+            for (var i = 0; i < skills.Count; i++)
+            {
+                var skill = skills[i];
+
+                // Um. Use reflection to look up the [Description] that we annotated. Makes lots of assumptions, like a) enum
+                // value is valid, and 2) the attribute has a single description.
+                // Source: https://codereview.stackexchange.com/a/157981
+                var description = (skill.GetType().GetMember(skill.ToString()).Single()
+                    .GetCustomAttributes(typeof(DescriptionAttribute), false).Single() as DescriptionAttribute).Description;
+
+                this.SpeakAndPrint($" {i + 1}: {skill}: {description}");
             }
         }
 
