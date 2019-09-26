@@ -18,7 +18,7 @@ namespace Prototype.Game.Models
         private bool[] switches = new bool[3];
         private bool[] expectedSwitches = new bool[3] { true, true, true };
 
-        public MachineRoom(Room containingRoom) : base(0, "MACHINE", 0)
+        public MachineRoom(Room containingRoom) : base(0, "MACHINE", 0, 0)
         {
             this.ContainingRoom = containingRoom;
 

@@ -24,11 +24,11 @@ namespace Prototype.Game.Models
         private readonly List<Room> connectedTo = new List<Room>();
         private List<AbstractItem> items = new List<AbstractItem>();
 
-        public Room(int floorNum, string id, int numMonsters)
+        public Room(int floorNum, string id, int numMonsters, int maxGoblins)
         {
             this.Id = id;
             this.floorNum = floorNum;
-            this.GenerateMonsters(numMonsters);
+            this.GenerateMonsters(numMonsters, maxGoblins);
         }
 
         public void ConnectTo(Room target)
@@ -277,7 +277,7 @@ namespace Prototype.Game.Models
             monster.Item = item;
         }
 
-        private void GenerateMonsters(int numMonsters)
+        private void GenerateMonsters(int numMonsters, int maxGoblins)
         {
             var totalMonsterProbability = GlobalConfig.MONSTER_PROBABILITY.Values.Sum();
             var weightSoFar = 0f;
@@ -298,13 +298,23 @@ namespace Prototype.Game.Models
                     else
                     {
                         weightSoFar += GlobalConfig.MONSTER_PROBABILITY[MonsterType.Regular];
-                        if (picked < GlobalConfig.MONSTER_PROBABILITY[MonsterType.Strong] + weightSoFar)
+                        if (maxGoblins > 0 && picked < GlobalConfig.MONSTER_PROBABILITY[MonsterType.Strong] + weightSoFar)
                         {
                             this.Monsters.Add(Monster.Generate(MonsterType.Strong));
+                            Console.WriteLine($"Goblin on {this.floorNum}F");
                         }
                         else
                         {
-                            throw new InvalidOperationException("Random-weight algorithm is broken");
+                            // Maybe it was a goblin pick but we already have enough goblins. Oh well. Just pick one of the other two.
+                            var isWeak = random.Next(100) < 30;
+                            if (isWeak)
+                            {
+                                this.Monsters.Add(Monster.Generate(MonsterType.Weak));
+                            }
+                            else
+                            {
+                                this.Monsters.Add(Monster.Generate(MonsterType.Regular));
+                            }
                         }
                     }
                 }

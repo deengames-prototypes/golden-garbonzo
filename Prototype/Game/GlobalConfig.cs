@@ -10,8 +10,8 @@ namespace Prototype.Game
         public const int NUM_FLOORS = 3;
 
         // PER ROOM
-        public static int MIN_MONSTERS_PER_FLOOR = 2;
-        public static int MAX_MONSTERS_PER_FLOOR = 4;
+        public static int MIN_MONSTERS_PER_ROOM = 2;
+        public static int MAX_MONSTERS_PER_ROOM = 4;
 
         public static Dictionary<MonsterType, float> MONSTER_PROBABILITY = new Dictionary<MonsterType, float>()
         {

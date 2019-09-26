@@ -21,15 +21,20 @@ namespace Prototype.Game.Models
         public Floor(int floorNum)
         {
             var numRooms = random.Next(GlobalConfig.MIN_ROOMS_PER_FLOOR, GlobalConfig.MAX_ROOMS_PER_FLOOR); // 5-8 rooms
+            
+            // number of goblins for floor N: 0, 2, 4, ...
+            var numGoblins = (floorNum - 1) * 2; 
+
             while (this.Rooms.Count < numRooms)
             {
-                // 40% chance of an empty room
-                var numMonsters = random.Next(GlobalConfig.MIN_MONSTERS_PER_FLOOR, GlobalConfig.MAX_MONSTERS_PER_FLOOR);
+                var numMonsters = random.Next(GlobalConfig.MIN_MONSTERS_PER_ROOM, GlobalConfig.MAX_MONSTERS_PER_ROOM);
 
                 var roomId = unusedRoomIds[random.Next(unusedRoomIds.Count)];
                 unusedRoomIds.Remove(roomId);
 
-                var room = new Room(floorNum, roomId, numMonsters);
+                var room = new Room(floorNum, roomId, numMonsters, numGoblins);
+                numGoblins -= room.Monsters.Count(m => m.Name.ToUpperInvariant().Contains("GOBLIN"));
+
                 // Guaranteed connectedness: each room connects to the next
                 if (this.Rooms.Any())
                 {
