@@ -9,21 +9,23 @@ namespace Prototype.Game.Models
 {
     class Player : Monster
     {
+        private const float STONE_SKIN_DEFENSE_MULITPLIER = 2f;
+        private const int STONE_SKIN_TURNS_PER_USE = 3;
         public const float KICK_MULTIPLIER = 3.5f;
         public const float NANITE_DAMAGE_PERCENT = 0.25f; // 0.3f => damage 30% of monsters' max health
+
         public const int HEALTH_GROWTH_ON_STAT_POINT = 5;
         public const int STR_DEF_GROWTH_ON_STAT_POINT = 1;
 
         private const float HEAL_PERCENT_PER_MOVE = 0.2f;
-        private const float STONE_SKIN_DEFENSE_MULITPLIER = 2f;
-        private const int STONE_SKIN_TURNS_PER_USE = 3;
-
+        private const int SKILL_POINTS_REGAIN_PER_MOVE = 3; // Need to heal? Leave and come back, DONE.
+        
         public List<AbstractItem> Inventory = new List<AbstractItem>();
 
         public int CurrentSkillPoints { get; set; }
         public int TotalSkillPoints { get; private set; }
         public bool IsFocused = false;
-        public readonly List<Skill> Skills = new List<Skill>() { Skill.NanoSwarm };
+        public readonly List<Skill> Skills = new List<Skill>() { Skill.Heal, Skill.NanoSwarm };
 
         public int Level { get; private set; } = 1;
         new public int ExperiencePoints { get; private set; } = 0;
@@ -117,12 +119,7 @@ namespace Prototype.Game.Models
 
             return false;
         }
-
-        internal void Heal()
-        {
-            int healAmount = (int)(this.TotalHealth * HEAL_PERCENT_PER_MOVE);
-            this.CurrentHealth = Math.Min(this.CurrentHealth + healAmount, this.TotalHealth);
-        }
+        
 
         internal void AddStoneSkin()
         {
@@ -139,8 +136,19 @@ namespace Prototype.Game.Models
                     return "Your stone-armoured skin returns to normal.";
                 }
             }
-
             return null;
+        }
+
+        internal void PostMove()
+        {
+            int healAmount = (int)(this.TotalHealth * HEAL_PERCENT_PER_MOVE);
+            this.CurrentHealth = Math.Min(this.CurrentHealth + healAmount, this.TotalHealth);
+
+            if (this.CurrentSkillPoints < this.TotalSkillPoints)
+            {
+                this.CurrentSkillPoints += SKILL_POINTS_REGAIN_PER_MOVE;
+                this.CurrentSkillPoints = Math.Min(this.CurrentSkillPoints, this.TotalSkillPoints);
+            }
         }
 
         private int MaxExperiencePointsForCurrentLevel()

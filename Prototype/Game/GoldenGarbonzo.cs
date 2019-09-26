@@ -221,9 +221,10 @@ namespace Prototype.Game
         private void ShowPlayerStats()
         {
             var message = $"You have {player.CurrentHealth} out of {player.TotalHealth} health, " +
-                $"{player.CurrentSkillPoints} out of {player.TotalSkillPoints} skill points, {player.ExperiencePoints} experience points." +
-                $"You have {player.Strength} strength and {player.Defense} defense.";
-            
+                $"{player.CurrentSkillPoints} out of {player.TotalSkillPoints} skill points, {player.ExperiencePoints} experience points. " +
+                $" Your have {this.player.Skills.Count} skills: {string.Join(", ", this.player.Skills.Select(s => s.ToString()))}. " +
+                $" You have {player.Strength} strength and {player.Defense} defense. ";
+
             if (player.HasStoneSkin())
             {
                 message += " Stone reinforces your skin.";
@@ -639,7 +640,7 @@ namespace Prototype.Game
                         {
                             this.currentRoom = targetRoom;
                             SpeakAndPrint(this.currentRoom.GetContents());
-                            player.Heal();
+                            player.PostMove();
                         }
                     }
                 }
