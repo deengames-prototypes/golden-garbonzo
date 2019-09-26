@@ -12,15 +12,15 @@ namespace Prototype.Game.Models
 
         internal List<Room> Rooms = new List<Room>();
 
-        private readonly List<string> unusedRoomIds = new List<string>()
+        private static readonly List<string> unusedRoomIds = new List<string>()
         {
-            "Ape", "Bison", "Cat", "Dog", "Eagle", "Fish", "Goat", "Hamster", "Kangaroo", "Lion",
+            "Ape", "Bison", "Cat", "Dog", "Eagle", "Fish", "Goat", "Hamster", "Jaguar", "Kangaroo", "Lion",
             "Monkey", "Nighthawk", "Oppossum", "Pony", "Raccoon", "Snail", "Tiger", "Whale", "Yak", "Zebra"
         };
 
         public Floor(int floorNum)
         {
-            var numRooms = random.Next(GlobalConfig.MIN_ROOMS_PER_FLOOR, GlobalConfig.MAX_ROOMS_PER_FLOOR); // 5-8 rooms
+            var numRooms = GlobalConfig.MIN_ROOMS_PER_FLOOR;// random.Next(GlobalConfig.MIN_ROOMS_PER_FLOOR, GlobalConfig.MAX_ROOMS_PER_FLOOR); // 5-8 rooms
             
             // number of goblins for floor N: 0, 2, 4, ...
             var numGoblins = (floorNum - 1) * 2; 
@@ -29,21 +29,23 @@ namespace Prototype.Game.Models
             {
                 var numMonsters = random.Next(GlobalConfig.MIN_MONSTERS_PER_ROOM, GlobalConfig.MAX_MONSTERS_PER_ROOM);
 
-                var roomId = unusedRoomIds[random.Next(unusedRoomIds.Count)];
+                var roomId = unusedRoomIds[0];
                 unusedRoomIds.Remove(roomId);
 
                 var room = new Room(floorNum, roomId, numMonsters, numGoblins);
                 numGoblins -= room.Monsters.Count(m => m.Name.ToUpperInvariant().Contains("GOBLIN"));
 
                 // Guaranteed connectedness: each room connects to the next
+                /*
                 if (this.Rooms.Any())
                 {
                     this.Rooms[this.Rooms.Count - 1].ConnectTo(room);
                 }
-
+                */
                 this.Rooms.Add(room);
             }
 
+            /*
             // Also connect each room to a random target
             for (var i = 0; i < this.Rooms.Count; i++)
             {
@@ -57,6 +59,19 @@ namespace Prototype.Game.Models
 
                 room.ConnectTo(target);
                 target.ConnectTo(room);
+            }
+            */
+
+            // Connect every room to every other room
+            foreach (var source in this.Rooms)
+            {
+                foreach (var target in this.Rooms)
+                {
+                    if (source != target)
+                    {
+                        source.ConnectTo(target);
+                    }
+                }
             }
 
             // Predictably, first and last room are stairs up/down respectively.

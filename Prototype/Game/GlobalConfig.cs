@@ -5,8 +5,8 @@ namespace Prototype.Game
 {
     public static class GlobalConfig
     {
-        public const int MIN_ROOMS_PER_FLOOR = 5;
-        public const int MAX_ROOMS_PER_FLOOR = 8;
+        public const int MIN_ROOMS_PER_FLOOR = 4;
+        public const int MAX_ROOMS_PER_FLOOR = 6;
         public const int NUM_FLOORS = 3;
 
         // PER ROOM
