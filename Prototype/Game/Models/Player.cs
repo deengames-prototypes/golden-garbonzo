@@ -10,6 +10,7 @@ namespace Prototype.Game.Models
     class Player : Monster
     {
         public const float KICK_MULTIPLIER = 3.5f;
+        public const float NANITE_DAMAGE_PERCENT = 0.25f; // 0.3f => damage 30% of monsters' max health
 
         private const float HEAL_PERCENT_PER_MOVE = 0.2f;
         private const float STONE_SKIN_DEFENSE_MULITPLIER = 2f;
@@ -20,7 +21,7 @@ namespace Prototype.Game.Models
         public int CurrentSkillPoints { get; set; }
         public int TotalSkillPoints { get; private set; }
         public bool IsFocused = false;
-        public readonly List<Skill> Skills = new List<Skill>() { Skill.Focus };
+        public readonly List<Skill> Skills = new List<Skill>() { Skill.NanoSwarm };
 
         public int Level { get; private set; } = 1;
         new public int ExperiencePoints { get; private set; } = 0;

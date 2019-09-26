@@ -125,6 +125,11 @@ namespace Prototype.Game
                 case "FOCUS":
                     this.TrySkill(Skill.Focus);
                     break;
+                case "NANOSWARM":
+                case "SWARM":
+                case "NS":
+                    this.TrySkill(Skill.NanoSwarm);
+                    break;
 
                 case "INVENTORY":
                 case "INV":
@@ -194,7 +199,7 @@ namespace Prototype.Game
             }
             else
             {
-                var message = SkillExecutor.Execute(skill, player);
+                var message = SkillExecutor.Execute(skill, player, currentRoom.Monsters);
                 player.CurrentSkillPoints -= skillCost;
                 SpeakAndPrint(message);
             }

@@ -1,12 +1,13 @@
 ﻿using Prototype.Game.Enums;
 using Prototype.Game.Models;
 using System;
+using System.Collections.Generic;
 
 namespace Prototype.Game
 {
     static class SkillExecutor
     {
-        public static string Execute(Skill skill, Player player)
+        public static string Execute(Skill skill, Player player, List<Monster> currentRoomMonsters)
         {
             switch (skill)
             {
@@ -22,6 +23,9 @@ namespace Prototype.Game
                 case Skill.Focus:
                     player.IsFocused = true;
                     return "You focus and gather all your strength.";
+                case Skill.NanoSwarm:
+                    currentRoomMonsters.ForEach(m => m.CurrentHealth -= (int)(m.TotalHealth * Player.NANITE_DAMAGE_PERCENT));
+                    return "Your swarm of nanite robots attack all monsters in the room.";
                 default:
                     throw new ArgumentException(skill.ToString());
             }
