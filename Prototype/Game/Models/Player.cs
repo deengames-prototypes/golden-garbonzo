@@ -19,7 +19,8 @@ namespace Prototype.Game.Models
 
         public int CurrentSkillPoints { get; set; }
         public int TotalSkillPoints { get; private set; }
-        public readonly List<Skill> Skills = new List<Skill>() { Skill.Kick };
+        public bool IsFocused = false;
+        public readonly List<Skill> Skills = new List<Skill>() { Skill.Focus };
 
         public int Level { get; private set; } = 1;
         new public int ExperiencePoints { get; private set; } = 0;
@@ -34,8 +35,8 @@ namespace Prototype.Game.Models
             { Skill.StoneSkin, 8 },
             { Skill.PhaseShield, 12 },
             { Skill.Kick, 5 },
-            { Skill.Teleport, 7 },
-            { Skill.Focus, 10 },
+            { Skill.Focus, 9 },
+            { Skill.NanoSwarm, 12 },
         };
 
         public Player() : base("Player", 50, 7, 3, 2)

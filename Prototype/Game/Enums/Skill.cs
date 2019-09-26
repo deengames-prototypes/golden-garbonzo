@@ -6,7 +6,7 @@
         StoneSkin,
         PhaseShield,
         Kick,
-        Teleport,
         Focus,
+        NanoSwarm,
     }
 }

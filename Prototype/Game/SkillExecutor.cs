@@ -19,6 +19,9 @@ namespace Prototype.Game
                 case Skill.PhaseShield:
                     player.PhaseShieldLeft = 20;
                     return "A phase shield hums into existance around you.";
+                case Skill.Focus:
+                    player.IsFocused = true;
+                    return "You focus and gather all your strength.";
                 default:
                     throw new ArgumentException(skill.ToString());
             }

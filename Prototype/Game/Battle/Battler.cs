@@ -48,6 +48,13 @@ namespace Prototype.Game.Battle
                 }
             }
 
+            var p = attacker is Player ? (Player)attacker : (Player)defender;
+            if (p.IsFocused)
+            {
+                p.IsFocused = false;
+                messages.Add("Your focus returns to normal. ");
+            }
+
             results.Winner = attacker.CurrentHealth > 0 ? attacker : defender;
             results.Loser = attacker.CurrentHealth == 0 ? attacker : defender;
             results.RoundMessages = messages.ToArray();
@@ -61,16 +68,19 @@ namespace Prototype.Game.Battle
             var shieldAbsorbs = 0;
             var player = defender as Player;
 
-            var damage = (attacker.Strength - defender.Defense) * attacker.AttacksPerRound;
-
-            if (defender is Player)
+            var attackRounds = attacker.AttacksPerRound;
+            if (attacker is Player && ((Player)attacker).IsFocused)
             {
-                if (player.PhaseShieldLeft > 0)
-                {
-                    shieldAbsorbs = Math.Min(player.PhaseShieldLeft, damage);
-                    player.PhaseShieldLeft -= shieldAbsorbs;
-                    damage -= shieldAbsorbs;
-                }
+                attackRounds++;
+            }
+
+            var damage = (attacker.Strength - defender.Defense) * attackRounds;
+
+            if (defender is Player && player.PhaseShieldLeft > 0)
+            {
+                shieldAbsorbs = Math.Min(player.PhaseShieldLeft, damage);
+                player.PhaseShieldLeft -= shieldAbsorbs;
+                damage -= shieldAbsorbs;
             }
 
             defender.CurrentHealth -= damage;
@@ -79,7 +89,7 @@ namespace Prototype.Game.Battle
             switch (Options.SpeechMode)
             {
                 case SpeechMode.Detailed:
-                    message = $"{attacker.Name} with {attacker.CurrentHealth} health attacks {attacker.AttacksPerRound} times for {damage} damage";
+                    message = $"{attacker.Name} with {attacker.CurrentHealth} health attacks {attackRounds} times for {damage} damage";
                     break;
                 case SpeechMode.Summary:
                     message = $"{attacker.Name} attacks {defender.Name}.";

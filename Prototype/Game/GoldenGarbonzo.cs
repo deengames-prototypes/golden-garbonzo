@@ -122,6 +122,9 @@ namespace Prototype.Game
                 case "K":
                     this.ProcessKick(inputTokens);
                     break;
+                case "FOCUS":
+                    this.TrySkill(Skill.Focus);
+                    break;
 
                 case "INVENTORY":
                 case "INV":
@@ -210,6 +213,11 @@ namespace Prototype.Game
             if (player.PhaseShieldLeft > 0)
             {
                 message += $" You have a phase shield that can absorb {player.PhaseShieldLeft} more damage.";
+            }
+
+            if (player.IsFocused)
+            {
+                message += " You are intensely focused.";
             }
 
             this.SpeakAndPrint(message);
@@ -466,7 +474,7 @@ namespace Prototype.Game
                             }
                             break;
                         case CombatType.Summary:
-                            var messages = results.RoundMessages.Where(r => r.ToUpperInvariant().Contains("SKIN"));
+                            var messages = results.RoundMessages.Where(r => r.ToUpperInvariant().Contains("SKIN") || r.ToUpperInvariant().Contains("FOCUS"));
                             foreach (var message in messages)
                             {
                                 SpeakAndPrint(message);
@@ -474,7 +482,7 @@ namespace Prototype.Game
                             break;
                     }
 
-                    SpeakAndPrint($"After {results.RoundMessages.Length / 2} rounds, {winnerMessage}", winnerMessage);
+                    SpeakAndPrint($"After {(int)Math.Ceiling(results.RoundMessages.Length / 2f)} rounds, {winnerMessage}", winnerMessage);
                     if (results.Winner == player)
                     {
                         if (target.Item != null)
