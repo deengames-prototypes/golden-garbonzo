@@ -17,10 +17,12 @@ namespace Prototype.Game.Models
 
         public int CurrentSkillPoints { get; set; }
         public int TotalSkillPoints { get; private set; }
-        public readonly List<Skill> Skills = new List<Skill>() { Skill.Heal, Skill.StoneSkin };
+        public readonly List<Skill> Skills = new List<Skill>() { Skill.PhaseShield };
 
         public int Level { get; private set; } = 1;
         new public int ExperiencePoints { get; private set; } = 0;
+
+        public int PhaseShieldLeft = 0;
 
         private int TurnsOfStoneSkinLeft = 0;
 

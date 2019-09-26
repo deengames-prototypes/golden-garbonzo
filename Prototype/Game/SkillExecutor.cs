@@ -16,6 +16,9 @@ namespace Prototype.Game
                 case Skill.StoneSkin:
                     player.AddStoneSkin();
                     return "Your skin hardens into stone.";
+                case Skill.PhaseShield:
+                    player.PhaseShieldLeft = 20;
+                    return "A phase shield hums into existance around you.";
                 default:
                     throw new ArgumentException(skill.ToString());
             }

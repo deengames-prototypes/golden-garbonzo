@@ -114,6 +114,11 @@ namespace Prototype.Game
                 case "SS":
                     this.TrySkill(Skill.StoneSkin);
                     break;
+                case "PHASE SHIELD":
+                case "PHASE":
+                case "PS":
+                    this.TrySkill(Skill.PhaseShield);
+                    break;
 
                 case "INVENTORY":
                 case "INV":
@@ -197,6 +202,11 @@ namespace Prototype.Game
             if (player.HasStoneSkin())
             {
                 message += " Stone reinforces your skin.";
+            }
+
+            if (player.PhaseShieldLeft > 0)
+            {
+                message += $" You have a phase shield that can absorb {player.PhaseShieldLeft} more damage.";
             }
 
             this.SpeakAndPrint(message);

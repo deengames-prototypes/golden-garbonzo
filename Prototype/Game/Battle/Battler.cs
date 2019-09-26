@@ -1,4 +1,5 @@
 ﻿using Prototype.Game.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Prototype.Game.Battle
@@ -29,7 +30,8 @@ namespace Prototype.Game.Battle
 
                 if (attacker is Player)
                 {
-                    var message = (attacker as Player).PostBattleRound();
+                    var player = (attacker as Player);
+                    var message = player.PostBattleRound();
                     if (!string.IsNullOrWhiteSpace(message))
                     {
                         messages.Add(message);
@@ -37,7 +39,8 @@ namespace Prototype.Game.Battle
                 }
                 if (defender is Player)
                 {
-                    var message = (defender as Player).PostBattleRound();
+                    var player = (defender as Player);
+                    var message = player.PostBattleRound();
                     if (!string.IsNullOrWhiteSpace(message))
                     {
                         messages.Add(message);
@@ -55,7 +58,21 @@ namespace Prototype.Game.Battle
         // One round of combat
         private string Attack(Monster attacker, Monster defender)
         {
+            var shieldAbsorbs = 0;
+            var player = defender as Player;
+
             var damage = (attacker.Strength - defender.Defense) * attacker.AttacksPerRound;
+
+            if (defender is Player)
+            {
+                if (player.PhaseShieldLeft > 0)
+                {
+                    shieldAbsorbs = Math.Min(player.PhaseShieldLeft, damage);
+                    player.PhaseShieldLeft -= shieldAbsorbs;
+                    damage -= shieldAbsorbs;
+                }
+            }
+
             defender.CurrentHealth -= damage;
             var message = "";
 
@@ -67,6 +84,11 @@ namespace Prototype.Game.Battle
                 case SpeechMode.Summary:
                     message = $"{attacker.Name} attacks {defender.Name}.";
                     break;
+            }
+
+            if (shieldAbsorbs > 0)
+            {
+                message += $" Your shield absorbed {shieldAbsorbs} damage {(player != null && player.PhaseShieldLeft == 0 ? "and dissipated" : "")}";
             }
 
             return message;
