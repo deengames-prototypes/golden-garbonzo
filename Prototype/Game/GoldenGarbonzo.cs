@@ -53,7 +53,7 @@ namespace Prototype.Game
                 Console.Write("> ");
                 input = Console.ReadLine();
                 this.speaker.StopAndClearQueue();
-                SpeakAndPrint($"You typed: {input}");
+                //SpeakAndPrint($"You typed: {input}");
                 this.ProcessInput(input);
             }
 
@@ -75,7 +75,10 @@ namespace Prototype.Game
                     }
                     else
                     {
-                        SpeakAndPrint("Type 'quit' to quit, 'list' or 'l' to list the current room; type ATTACK to attack a target, GO to go somewhere, GET to get something, or OPTIONS to change options");
+                        SpeakAndPrint(@"Commands: quit to quit, L or list to see room contents, " +
+                            "ATTACK and then an enemy name to attack a target, GO to go somewhere, GET to get something, and sometimes you can PUT items into things." +
+                            "Type I or INVENTORY to list items you picked up. You can type USE to use room fixtures. Type STAIRS to use stairs." +
+                            "Type stats or c to see your player stats.  You can also type OPTIONS to list or change options.");
                     }
                     break;
                 // TODO: need a command to approach the machine
